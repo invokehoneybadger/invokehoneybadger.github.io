@@ -7,7 +7,7 @@ This repository contains the coming-soon landing page for `invokehoneybadger.com
 - `index.html` — Simple, static coming-soon landing page (responsive, neon HBV theme).
 - `CNAME` — Custom domain file used by GitHub Pages (`invokehoneybadger.com`).
 - `README.md` — This file.
-
+<#
 ## Quick deploy (recommended)
 Option A — **GitHub Pages (user/site or repo pages)**:
 1. Create a repository named: `invokehoneybadger.github.io` (or any repo and use Pages → branch settings).  
@@ -41,5 +41,5 @@ For now, the page uses a `mailto:` contact. When ready, consider Google Workspac
 This repo is a simple landing page. Use as you like. If you intend to open-source HBV tools later, add an appropriate license file (MIT, Apache-2.0, etc.).
 
 ---
-
+#>
 Contact: `hi@invokehoneybadger.com`
