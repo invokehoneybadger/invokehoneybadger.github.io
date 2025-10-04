@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Invoke HoneyBadger — Origins of HoneyBadger Vanguard. Red-team tooling, recon, and HBV community resources.">
 <title>Invoke HoneyBadger — Coming Soon</title>
 <style>
   :root{
@@ -10,43 +11,52 @@
     --bg:#0b0c0f;
     --muted:#9aa3ad;
     --accent:#A7FFEA;
+    --card:#0f1113;
   }
-  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#111113);color:#e9eef6}
-  .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:32px}
-  .card{max-width:880px;background:linear-gradient( to bottom, rgba(255,255,255,0.02), rgba(0,0,0,0.12));border-radius:14px;padding:36px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
-  .hero{display:flex;gap:24px;align-items:center}
-  .logo{width:96px;height:96px;border-radius:12px;background:var(--hbv-yellow);display:flex;align-items:center;justify-content:center;color:#0b0c0f;font-weight:800;font-size:26px}
-  h1{margin:0;font-size:28px;letter-spacing: -0.02em}
-  p.lead{color:var(--muted);margin-top:6px}
-  .cta{margin-top:18px;display:flex;gap:12px}
-  .btn{padding:10px 16px;border-radius:10px;font-weight:600;border:0;cursor:pointer}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#0f1113);color:#e9eef6}
+  .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{width:100%;max-width:980px;background:linear-gradient( to bottom, rgba(255,255,255,0.02), rgba(0,0,0,0.12));border-radius:12px;padding:28px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 40px rgba(0,0,0,0.6)}
+  .hero{display:flex;gap:20px;align-items:center}
+  .logo{width:92px;height:92px;border-radius:10px;background:var(--hbv-yellow);display:flex;align-items:center;justify-content:center;color:#0b0c0f;font-weight:900;font-size:28px}
+  h1{margin:0;font-size:30px;letter-spacing:-0.02em}
+  p.lead{color:var(--muted);margin-top:6px;max-width:70ch}
+  .cta{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{padding:10px 16px;border-radius:10px;font-weight:700;border:0;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
   .btn-solid{background:var(--hbv-yellow);color:#0b0c0f}
   .btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-  footer{margin-top:18px;color:var(--muted);font-size:13px}
-  .links{margin-top:12px}
-  a.link{color:var(--accent);text-decoration:none}
+  .meta{margin-top:12px;color:var(--muted);font-size:13px}
+  .social{margin-left:auto;display:flex;gap:8px}
+  .social a{color:var(--muted);text-decoration:none;font-size:13px}
+  footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+  @media (max-width:720px){
+    .hero{flex-direction:column;align-items:flex-start}
+    .social{margin-left:0}
+  }
 </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <div class="hero">
-        <div class="logo">HB</div>
+        <div class="logo" aria-hidden="true">HB</div>
         <div>
           <h1>Invoke HoneyBadger</h1>
-          <p class="lead">Origins of HoneyBadger Vanguard — red-team tooling, recon, and HBV community resources. Launching soon.</p>
+          <p class="lead">Origins of <strong>HoneyBadger Vanguard (HBV)</strong> — red-team tooling, recon, and community resources. Site and repo launching soon. Want early access or to collaborate?</p>
           <div class="cta">
             <a class="btn btn-solid" href="mailto:hi@invokehoneybadger.com">Get updates</a>
             <a class="btn btn-outline" href="https://github.com/invokehoneybadger" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="btn btn-outline" href="https://discord.gg" target="_blank" rel="noreferrer">Discord</a>
           </div>
-          <div class="links">
-            <small>Prefer to help or collab? <a class="link" href="mailto:hi@invokehoneybadger.com">Email me</a></small>
-          </div>
+          <div class="meta">Build, demos, and tools will be posted under the <code>invokehoneybadger</code> org on GitHub. Email: <a href="mailto:hi@invokehoneybadger.com">hi@invokehoneybadger.com</a></div>
+        </div>
+        <div class="social" aria-hidden="true">
+          <a href="https://github.com/invokehoneybadger" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://twitter.com/invokehoneybadger" target="_blank" rel="noreferrer">X</a>
         </div>
       </div>
-      <footer>© <span id="y"></span> Invoke HoneyBadger — HBV. Built with ☕ and BRRRRT.</footer>
+      <footer>© <span id="year"></span> Invoke HoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>
     </div>
   </div>
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+<script>document.getElementById('year').textContent=new Date().getFullYear()</script>
 </body>
 </html>
