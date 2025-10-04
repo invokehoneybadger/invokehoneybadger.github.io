@@ -3,158 +3,231 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="description" content="InvokeHoneyBadger — Origins of HoneyBadger Vanguard (HBV). Red-team tooling, recon, and community resources.">
-<title>InvokeHoneyBadger — Coming Soon</title>
+<meta name="description" content="Invoke HoneyBadger — HoneyBadger Vanguard (HBV). Red-team tooling, recon frameworks, and HBV community resources.">
+<title>InvokeHoneyBadger — HBV (Terminal)</title>
 
-<!-- Basic meta & OG (edit og:image if you add one) -->
-<meta property="og:title" content="Invoke HoneyBadger — HoneyBadger Vanguard (HBV)" />
-<meta property="og:description" content="Red-team tooling, recon frameworks, and HBV community resources. Site & repo launching soon." />
+<!-- OG (edit og:image if you add one) -->
+<meta property="og:title" content="Invoke HoneyBadger — HBV" />
+<meta property="og:description" content="Red-team tooling, recon frameworks, and HBV community resources." />
 <meta property="og:url" content="https://invokehoneybadger.com" />
 <meta name="twitter:card" content="summary_large_image" />
 
 <style>
   :root{
     --hbv-yellow:#FFF244;
-    --bg-dark:#070709;
-    --muted:#9aa3ad;
-    --accent:#A7FFEA;
-    --card:#0f1113;
-    --red-1:#820000;
-    --red-2:#5a0000;
+    --bg:#030304;
+    --muted:#83a17a;
+    --matrix-green: #6af072;
+    --matrix-dark:#0b2510;
+    --card-bg: rgba(3,4,6,0.72);
+    --card-border: rgba(100,255,140,0.06);
   }
 
-  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:var(--bg-dark);color:#e9eef6}
-  /* full-screen animated background layers */
-  .bg{
-    position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  html,body{height:100%;margin:0;background:var(--bg);color:#d9e6d6;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; -webkit-font-smoothing:antialiased}
+  /* canvas background full bleed */
+  #matrix-canvas{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,#020202 0%, #041104 60%);display:block}
+
+  /* soft vignette + CRT scan */
+  .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
     background:
-      radial-gradient(1200px 600px at 10% 20%, rgba(255,28,28,0.06), transparent 8%),
-      radial-gradient(900px 700px at 90% 80%, rgba(255,0,0,0.04), transparent 10%),
-      linear-gradient(180deg, rgba(16,8,8,0.6), rgba(2,2,2,0.9));
-    mix-blend-mode:normal;
+      radial-gradient(1200px 600px at 50% 30%, rgba(0,80,20,0.06), transparent 12%),
+      linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 100%);
+    mix-blend-mode:screen;opacity:0.9;
+  }
+  .scanlines{position:fixed;inset:0;z-index:2;pointer-events:none;background:
+    repeating-linear-gradient(180deg, rgba(0,0,0,0.02) 0 1px, rgba(0,0,0,0) 1px 4px);
+    mix-blend-mode:overlay;opacity:0.55;
   }
 
-  /* subtle moving scanlines overlay */
-  .bg::before{
-    content:"";position:absolute;inset:0;
-    background:repeating-linear-gradient(180deg, rgba(255,255,255,0.01) 0 1px, rgba(0,0,0,0) 1px 4px), linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.2));
-    animation: scan 12s linear infinite;
-    opacity:0.7;
-    mix-blend-mode:overlay;
+  /* container */
+  .wrap{position:relative;z-index:3;min-height:100%;display:flex;align-items:center;justify-content:center;padding:28px}
+  .card{width:100%;max-width:1080px;background:var(--card-bg);border-radius:12px;padding:22px;border:1px solid var(--card-border);box-shadow:0 16px 60px rgba(0,0,0,0.8);backdrop-filter: blur(4px);display:flex;gap:18px;align-items:stretch}
+  
+  /* terminal column */
+  .term{
+    width:320px;min-width:240px;border-radius:10px;padding:14px;background:linear-gradient(180deg, rgba(0,16,6,0.5), rgba(0,8,4,0.35));border:1px solid rgba(0,255,140,0.04);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    color:var(--matrix-green);font-size:12.5px;line-height:1.4;overflow:hidden;display:flex;flex-direction:column;gap:8px;
   }
-  @keyframes scan{ from {background-position:0 0} to {background-position:0 1200px} }
+  .term .title{font-weight:700;color:var(--hbv-yellow);letter-spacing:0.04em}
+  .term pre{margin:0;font-family:inherit;font-size:12px;color:var(--matrix-green);opacity:0.95;white-space:pre-wrap;word-break:break-word}
 
-  /* moving particle field (SVG injected) */
-  .bg svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:0.6;}
+  /* main content */
+  .main{flex:1;display:flex;flex-direction:column;gap:10px;padding:6px 8px}
+  .hero{display:flex;gap:18px;align-items:flex-start}
+  .logo{width:96px;height:96px;border-radius:12px;background:var(--hbv-yellow);display:flex;align-items:center;justify-content:center;position:relative;color:#0b0c0f;font-weight:900;font-size:28px;flex-shrink:0;box-shadow:0 8px 34px rgba(0,0,0,0.5)}
+  .logo .hb{line-height:1;margin:0}
+  .logo .v{position:absolute;right:8px;bottom:6px;color:#0b0c0f;font-weight:900;font-size:18px;transform:rotate(-8deg);background:rgba(0,0,0,0.03);padding:3px 6px;border-radius:6px}
 
-  .wrap{position:relative;z-index:2;min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
-  .card{width:100%;max-width:980px;background:linear-gradient( to bottom, rgba(255,255,255,0.02), rgba(0,0,0,0.12));border-radius:12px;padding:28px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 12px 50px rgba(0,0,0,0.6)}
-  .hero{display:flex;gap:20px;align-items:center}
-  /* logo box with HB and V overlay */
-  .logo{
-    width:96px;height:96px;border-radius:12px;background:var(--hbv-yellow);display:flex;align-items:center;justify-content:center;position:relative;
-    color:#0b0c0f;font-weight:900;font-size:28px;flex-shrink:0;
-    box-shadow: 0 6px 22px rgba(0,0,0,0.4), inset 0 -4px 0 rgba(0,0,0,0.06);
-  }
-  .logo .hb{line-height:1;margin:0;}
-  .logo .v{
-    position:absolute;right:10px;bottom:6px;color:#0b0c0f;font-weight:900;font-size:20px;transform:rotate(-6deg);
-    background:rgba(0,0,0,0.03);padding:3px 6px;border-radius:6px;
-    box-shadow:0 3px 6px rgba(0,0,0,0.12);
-  }
-  /* small variant for very small screens */
-  @media (max-width:420px){ .logo{width:76px;height:76px;font-size:22px} .logo .v{font-size:16px;right:8px;bottom:6px} }
-
-  h1{margin:0;font-size:30px;letter-spacing:-0.02em}
-  p.lead{color:var(--muted);margin-top:6px;max-width:64ch}
-  .cta{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
-  .btn{padding:10px 16px;border-radius:10px;font-weight:700;border:0;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+  h1{margin:0;font-size:28px;color:#dff8d8}
+  p.lead{color:#a9d0a1;margin-top:6px;max-width:72ch}
+  .cta{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+  .btn{padding:9px 14px;border-radius:8px;font-weight:700;border:0;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
   .btn-solid{background:var(--hbv-yellow);color:#0b0c0f}
-  .btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+  .btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.04);color:#9fbf9a}
 
-  .meta{margin-top:12px;color:var(--muted);font-size:13px}
-  .social{margin-left:auto;display:flex;gap:12px;align-items:center}
-  .social a{color:var(--muted);text-decoration:none;font-size:13px;padding:6px 8px;border-radius:8px}
+  .meta{margin-top:10px;color:#9fbf9a;font-size:13px;display:flex;gap:12px;align-items:center}
   .handle{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;background:rgba(255,255,255,0.02);padding:6px 8px;border-radius:8px;color:var(--hbv-yellow);font-weight:700}
 
-  footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
-  @media (max-width:720px){
-    .hero{flex-direction:column;align-items:flex-start}
+  .social{margin-left:auto;display:flex;gap:10px;align-items:center}
+  .social a{color:#9fbf9a;text-decoration:none;font-size:13px;padding:6px 8px;border-radius:6px}
+
+  footer{margin-top:14px;color:#9fbf9a;font-size:13px;text-align:center}
+
+  /* responsive */
+  @media (max-width:920px){
+    .card{flex-direction:column}
+    .term{width:100%;min-width:auto;order:2}
+    .hero{flex-direction:row;align-items:center}
     .social{margin-left:0}
   }
-
-  /* subtle animated glow around card */
-  .card::after{
-    content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:-64px;width:420px;height:240px;border-radius:50%;
-    background:radial-gradient(closest-side, rgba(255,242,68,0.07), rgba(255,0,0,0.0));filter:blur(40px);opacity:0.9;z-index:1;pointer-events:none;
+  @media (max-width:520px){
+    .logo{width:72px;height:72px;font-size:20px}
+    .term{font-size:12px}
+    h1{font-size:22px}
   }
+
+  /* subtle glow under card */
+  .card::after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:-80px;width:520px;height:260px;border-radius:50%;background:radial-gradient(closest-side, rgba(111,255,146,0.06), rgba(0,0,0,0));filter:blur(40px);opacity:0.95;z-index:2;pointer-events:none}
 </style>
 </head>
 <body>
-  <!-- animated background -->
-  <div class="bg" aria-hidden="true">
-    <!-- inline SVG particles (red-team vibe) -->
-    <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <filter id="fBlur"><feGaussianBlur stdDeviation="1.2"/></filter>
-        <linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ff4a4a" stop-opacity="0.15"/><stop offset="1" stop-color="#ff8a8a" stop-opacity="0.06"/></linearGradient>
-      </defs>
-      <!-- drifting radial glows -->
-      <g fill="url(#g)" filter="url(#fBlur)">
-        <circle cx="160" cy="120" r="220">
-          <animate attributeName="cx" dur="30s" values="160;320;120;160" repeatCount="indefinite"/>
-          <animate attributeName="cy" dur="22s" values="120;220;80;120" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="1040" cy="680" r="300" style="stop-color:#ff2a2a;">
-          <animate attributeName="cx" dur="40s" values="1040;920;1120;1040" repeatCount="indefinite"/>
-          <animate attributeName="cy" dur="26s" values="680;540;720;680" repeatCount="indefinite"/>
-        </circle>
-      </g>
-
-      <!-- small moving particles -->
-      <g fill="#ff6b6b" opacity="0.6">
-        <circle cx="200" cy="340" r="2"><animate attributeName="cx" dur="9s" values="200;240;180;200" repeatCount="indefinite"/></circle>
-        <circle cx="640" cy="220" r="1.5"><animate attributeName="cy" dur="11s" values="220;260;200;220" repeatCount="indefinite"/></circle>
-        <circle cx="920" cy="120" r="1.8"><animate attributeName="cx" dur="8s" values="920;880;960;920" repeatCount="indefinite"/></circle>
-        <circle cx="520" cy="480" r="1.6"><animate attributeName="cy" dur="14s" values="480;420;520;480" repeatCount="indefinite"/></circle>
-        <circle cx="320" cy="620" r="1.2"><animate attributeName="cx" dur="12s" values="320;360;280;320" repeatCount="indefinite"/></circle>
-      </g>
-    </svg>
-  </div>
+  <!-- Matrix canvas background -->
+  <canvas id="matrix-canvas" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
 
   <div class="wrap">
-    <div class="card" role="main">
-      <div class="hero">
-        <div class="logo" aria-hidden="true" title="InvokeHoneyBadger — HBV">
-          <div class="hb">HBV</div>
-        </div>
-
-        <div style="flex:1;">
-          <h1>InvokeHoneyBadger</h1>
-          <p class="lead">Origins of <strong>HoneyBadger Vanguard (HBV)</strong> — red-team tooling, recon, and HBV community resources. Site and repo launching soon. Want early access or to collaborate?</p>
-
-          <div class="cta">
-            <a class="btn btn-solid" href="mailto:hi@invokehoneybadger.com">Get updates</a>
-            <a class="btn btn-outline" href="https://github.com/invokehoneybadger" target="_blank" rel="noreferrer">GitHub</a>
-            <a class="btn btn-outline" href="https://discord.gg" target="_blank" rel="noreferrer">Discord</a>
-          </div>
-
-          <div class="meta" style="display:flex;align-items:center;gap:12px;margin-top:12px">
-            <span class="handle">@InvokHonyBadgr</span>
-            <small style="color:var(--muted)">• Email: <a href="mailto:hi@invokehoneybadger.com" style="color:var(--accent);text-decoration:none">hi@invokehoneybadger.com</a></small>
-          </div>
-        </div>
-
-        <div class="social" aria-hidden="true">
-          <a href="https://github.com/invokehoneybadger" target="_blank" rel="noreferrer">GitHub</a>
-          <a href="https://x.com/InvokHonyBadgr" target="_blank" rel="noreferrer">X</a>
-        </div>
+    <div class="card" role="main" aria-labelledby="site-title">
+      <div class="term" aria-hidden="false">
+        <div class="title">hbv@invoke:~$ <small style="color:#9fbf9a;font-weight:600">session</small></div>
+        <!-- dynamic terminal stream -->
+        <pre id="term-stream" aria-live="polite" role="status"></pre>
+        <div style="margin-top:auto;color:#86b386;font-size:12px;opacity:0.9">Connected • Beacon: active • ops mode: stealth</div>
       </div>
 
-      <footer>© <span id="year"></span> InvokeHoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>
+      <div class="main">
+        <div class="hero">
+          <div class="logo" aria-hidden="true" title="Invoke HoneyBadger — HBV">
+            <div class="hb">HBV</div>
+          </div>
+
+          <div style="flex:1">
+            <h1 id="site-title">InvokeHoneyBadger</h1>
+            <p class="lead">Origins of <strong>HoneyBadger Vanguard (HBV)</strong> — red-team tooling, recon frameworks, and HBV community resources. Site & repo launching soon. Want early access or to collaborate?</p>
+
+            <div class="cta">
+              <a class="btn btn-solid" href="mailto:hi@invokehoneybadger.com">Get updates</a>
+              <a class="btn btn-outline" href="https://github.com/invokehoneybadger" target="_blank" rel="noreferrer">GitHub</a>
+              <a class="btn btn-outline" href="https://x.com/InvokHonyBadgr" target="_blank" rel="noreferrer">X</a>
+            </div>
+
+            <div class="meta">
+              <span class="handle">@InvokHonyBadgr</span>
+              <small>Email: <a href="mailto:hi@invokehoneybadger.com" style="color:#9fbf9a;text-decoration:none">hi@invokehoneybadger.com</a></small>
+              <div class="social" aria-hidden="true">
+                <a href="https://github.com/invokehoneybadger" target="_blank" rel="noreferrer">GitHub</a>
+                <a href="https://x.com/InvokHonyBadgr" target="_blank" rel="noreferrer">X</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer>© <span id="year"></span> InvokeHoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>
+      </div>
     </div>
   </div>
 
-<script>document.getElementById('year').textContent=new Date().getFullYear()</script>
+<script>
+/* MATRIX CANVAS
+   Lightweight matrix rain effect with responsive sizing.
+*/
+(() => {
+  const canvas = document.getElementById('matrix-canvas');
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = innerWidth;
+  let H = canvas.height = innerHeight;
+  const cols = Math.floor(W / 16);
+  const ypos = Array(cols).fill(0);
+
+  function resize() {
+    W = canvas.width = innerWidth;
+    H = canvas.height = innerHeight;
+    // recalc columns
+    const newCols = Math.floor(W / 16);
+    ypos.length = newCols;
+    for (let i = 0; i < newCols; i++) if (!ypos[i]) ypos[i] = Math.random() * H;
+  }
+  addEventListener('resize', resize);
+
+  function matrixFrame() {
+    // translucent background to create trail effect
+    ctx.fillStyle = 'rgba(2,6,2,0.18)';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.font = '12px "Roboto Mono", "Courier New", monospace';
+    for (let i = 0; i < ypos.length; i++) {
+      const text = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96)); // katakana-like runes
+      const x = i * 16;
+      const y = ypos[i] * 16;
+
+      // bright head
+      ctx.fillStyle = 'rgba(180,255,190,0.95)';
+      ctx.fillText(text, x, y);
+
+      // faded trail
+      for (let t = 1; t < 5; t++) {
+        ctx.fillStyle = `rgba(90,180,110,${0.12 * (5 - t)})`;
+        ctx.fillText(text, x, y - t * 16);
+      }
+
+      if ((y > H && Math.random() > 0.975) || (Math.random() > 0.9999)) {
+        ypos[i] = 0;
+      } else {
+        ypos[i] = ypos[i] + 0.85;
+      }
+    }
+
+    requestAnimationFrame(matrixFrame);
+  }
+  matrixFrame();
+})();
+
+/* TERMINAL STREAM (left panel)
+   Push lines into the term pre element to animate a live stream.
+*/
+(() => {
+  const el = document.getElementById('term-stream');
+  const lines = [
+    'init hbv session: ok',
+    'loading modules: recon, beacon, lateral',
+    'payloads: staging... done',
+    'connectors: ssh, winrm, smb',
+    'recon> scan subnet 10.0.0.0/24',
+    'recon> discovered: host-72 (svc: smb, rdp)',
+    'dispatch> beacon schedule: randomized jitter',
+    'opsec> user-agent rotate: enabled',
+    'store> vault encrypted: sha256-ok',
+    'note: keep operations compartmentalized'
+  ];
+  let idx = 0;
+
+  function pushLine() {
+    const now = new Date().toISOString().replace('T',' ').replace('Z','');
+    const line = `[${now}] ${lines[idx++ % lines.length]}`;
+    el.textContent = (el.textContent + '\n' + line).split('\n').slice(-16).join('\n');
+    // small highlight flash
+    el.style.opacity = 0.92;
+    setTimeout(()=> el.style.opacity = 1, 80);
+  }
+
+  setInterval(pushLine, 1200);
+  // seed a few lines
+  for (let i=0;i<6;i++) setTimeout(pushLine, i*120);
+})();
+
+/* fill year */
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
