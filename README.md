@@ -21,3 +21,25 @@ Option B — **Netlify / Vercel**:
 
 ## DNS (GoDaddy) — GitHub Pages A records (if using Apex/root)
 Set these **A** records at your registrar for `invokehoneybadger.com` (no www):
+
+185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153
+
+Then optionally create a `CNAME` record for `www` that points to `<your-github-username>.github.io` (or to `invokehoneybadger.github.io`).
+
+## Email / Contact
+For now, the page uses a `mailto:` contact. When ready, consider Google Workspace or ImprovMX (email forwarding) and add SPF/DKIM.
+
+## Security & settings
+- Enable **HTTPS** in GitHub Pages Settings once DNS is propagated.  
+- Use WHOIS privacy, Domain Lock, and Auto-Renew on your registrar.  
+- Protect your GitHub account with 2FA.
+
+## License
+This repo is a simple landing page. Use as you like. If you intend to open-source HBV tools later, add an appropriate license file (MIT, Apache-2.0, etc.).
+
+---
+
+Contact: `hi@invokehoneybadger.com`
