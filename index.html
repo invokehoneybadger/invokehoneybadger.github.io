@@ -74,6 +74,12 @@
   .social{margin-left:auto;display:flex;gap:10px;align-items:center}
   .social a{color:#9fbf9a;text-decoration:none;font-size:13px;padding:6px 8px;border-radius:6px}
 
+  <!-- Signature / Tribute (paste directly above the <footer> element) -->
+  <div class="signature" role="note" aria-label="Signature phrase">
+  <span class="sig-emoji" aria-hidden="true">🦾</span>
+  <span class="sig-text">“Inspired by live tradecraft. Hardened by real-world ops. Built in the shadows.” <span class="sig-nod">— R.M.</span></span>
+  </div>
+
   footer{margin-top:14px;color:#9fbf9a;font-size:13px;text-align:center}
 
   /* responsive */
@@ -91,6 +97,34 @@
 
   /* subtle glow under card */
   .card::after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:-80px;width:520px;height:260px;border-radius:50%;background:radial-gradient(closest-side, rgba(111,255,146,0.06), rgba(0,0,0,0));filter:blur(40px);opacity:0.95;z-index:2;pointer-events:none}
+/* Signature / tribute styling */
+.signature{
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  color:#bfe6b7;            /* pale green that fits the terminal palette */
+  font-size:13px;
+  line-height:1.2;
+  opacity:0.95;
+  font-style:italic;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+}
+
+.signature .sig-emoji{
+  font-size:18px;
+  transform:translateY(1px);
+}
+
+.signature .sig-text{ font-style:italic; }
+
+.signature .sig-nod{
+  margin-left:8px;
+  font-style:normal;
+  color:var(--muted);
+  font-weight:600;
+  letter-spacing:0.02em;
+}
 </style>
 </head>
 <body>
@@ -126,7 +160,7 @@
 
             <div class="meta">
               <span class="handle">@InvokHonyBadgr</span>
-              <small>Email: <a href="mailto:support@invokehoneybadger.com" style="color:#9fbf9a;text-decoration:none">david@invokehoneybadger.com</a></small>
+              <small>Email: <a href="mailto:support@invokehoneybadger.com" style="color:#9fbf9a;text-decoration:none">N00B@invokehoneybadger.com</a></small>
               <div class="social" aria-hidden="true">
               </div>
             </div>
