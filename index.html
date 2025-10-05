@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
+<meta charset="utf-8" />
 <link rel="icon" href="/invokehoneybadger_favicon.ico" type="image/x-icon" />
 <link rel="icon" sizes="32x32" href="/invokehoneybadger_favicon_32.png" type="image/png" />
-<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="description" content="Invoke HoneyBadger — HoneyBadger Vanguard (HBV). Red-team tooling, recon frameworks, and HBV community resources.">
 <title>InvokeHoneyBadger — HBV (Terminal)</title>
@@ -120,16 +120,14 @@
 
             <div class="cta">
               <a class="btn btn-solid" href="mailto:hi@invokehoneybadger.com">Get updates</a>
-              <a class="btn btn-outline" href="https://github.com/invokehoneybadger" target="_blank" rel="noreferrer">GitHub</a>
-              <a class="btn btn-outline" href="https://x.com/InvokHonyBadgr" target="_blank" rel="noreferrer">X</a>
+              <a class="btn btn-outline" href="https://github.com/invokehoneybadger" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <a class="btn btn-outline" href="https://x.com/InvokHonyBadgr" target="_blank" rel="noopener noreferrer">X</a>
             </div>
 
             <div class="meta">
               <span class="handle">@InvokHonyBadgr</span>
-              <small>Email: <a href="mailto:hi@invokehoneybadger.com" style="color:#9fbf9a;text-decoration:none">hi@invokehoneybadger.com</a></small>
+              <small>Email: <a href="mailto:support@invokehoneybadger.com" style="color:#9fbf9a;text-decoration:none">david@invokehoneybadger.com</a></small>
               <div class="social" aria-hidden="true">
-                <a href="https://github.com/invokehoneybadger" target="_blank" rel="noreferrer">GitHub</a>
-                <a href="https://x.com/InvokHonyBadgr" target="_blank" rel="noreferrer">X</a>
               </div>
             </div>
           </div>
@@ -152,14 +150,19 @@
   const cols = Math.floor(W / 16);
   const ypos = Array(cols).fill(0);
 
-  function resize() {
-    W = canvas.width = innerWidth;
-    H = canvas.height = innerHeight;
-    // recalc columns
-    const newCols = Math.floor(W / 16);
-    ypos.length = newCols;
-    for (let i = 0; i < newCols; i++) if (!ypos[i]) ypos[i] = Math.random() * H;
+function resize() {
+  W = canvas.width = innerWidth;
+  H = canvas.height = innerHeight;
+  const newCols = Math.floor(W / 16);
+
+  // preserve existing values, expand or shrink responsibly
+  const old = ypos.slice();
+  ypos.length = newCols;
+  for (let i = 0; i < newCols; i++) {
+    if (typeof old[i] !== 'undefined') ypos[i] = old[i];
+    else ypos[i] = Math.random() * (H / 16);
   }
+}
   addEventListener('resize', resize);
 
   function matrixFrame() {
