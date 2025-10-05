@@ -5,8 +5,9 @@
 <link rel="icon" href="/invokehoneybadger_favicon.ico" type="image/x-icon" />
 <link rel="icon" sizes="32x32" href="/invokehoneybadger_favicon_32.png" type="image/png" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#030304" />
 <meta name="description" content="Invoke HoneyBadger — HoneyBadger Vanguard (HBV). Red-team tooling, recon frameworks, and HBV community resources.">
-<title>InvokeHoneyBadger — HBV (Terminal)</title>
+<title>Invoke HoneyBadger — HBV (Terminal)</title>
 
 <!-- OG (edit og:image if you add one) -->
 <meta property="og:title" content="Invoke HoneyBadger — HBV" />
@@ -76,6 +77,35 @@
 
   footer{margin-top:14px;color:#9fbf9a;font-size:13px;text-align:center}
 
+  /* Signature / tribute styling */
+  .signature{
+    margin-top:14px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    color:#bfe6b7;            /* pale green that fits the terminal palette */
+    font-size:13px;
+    line-height:1.2;
+    opacity:0.95;
+    font-style:italic;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+  }
+
+  .signature .sig-emoji{
+    font-size:18px;
+    transform:translateY(1px);
+  }
+
+  .signature .sig-text{ font-style:italic; }
+
+  .signature .sig-nod{
+    margin-left:8px;
+    font-style:normal;
+    color:var(--muted);
+    font-weight:600;
+    letter-spacing:0.02em;
+  }
+
   /* responsive */
   @media (max-width:920px){
     .card{flex-direction:column}
@@ -91,34 +121,6 @@
 
   /* subtle glow under card */
   .card::after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:-80px;width:520px;height:260px;border-radius:50%;background:radial-gradient(closest-side, rgba(111,255,146,0.06), rgba(0,0,0,0));filter:blur(40px);opacity:0.95;z-index:2;pointer-events:none}
-/* Signature / tribute styling */
-.signature{
-  margin-top:14px;
-  display:flex;
-  gap:10px;
-  align-items:center;
-  color:#bfe6b7;            /* pale green that fits the terminal palette */
-  font-size:13px;
-  line-height:1.2;
-  opacity:0.95;
-  font-style:italic;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
-}
-
-.signature .sig-emoji{
-  font-size:18px;
-  transform:translateY(1px);
-}
-
-.signature .sig-text{ font-style:italic; }
-
-.signature .sig-nod{
-  margin-left:8px;
-  font-style:normal;
-  color:var(--muted);
-  font-weight:600;
-  letter-spacing:0.02em;
-}
 </style>
 </head>
 <body>
@@ -139,11 +141,12 @@
       <div class="main">
         <div class="hero">
           <div class="logo" aria-hidden="true" title="Invoke HoneyBadger — HBV">
-            <div class="hb">HBV</div>
+            <div class="hb">HB</div>
+            <div class="v" aria-hidden="true">V</div>
           </div>
 
           <div style="flex:1">
-            <h1 id="site-title">InvokeHoneyBadger</h1>
+            <h1 id="site-title">Invoke HoneyBadger</h1>
             <p class="lead">Origins of <strong>HoneyBadger Vanguard (HBV)</strong> — red-team tooling, recon frameworks, and HBV community resources. Site & repo launching soon. Want early access or to collaborate?</p>
 
             <div class="cta">
@@ -154,14 +157,23 @@
 
             <div class="meta">
               <span class="handle">@InvokHonyBadgr</span>
-              <small>Email: <a href="mailto:support@invokehoneybadger.com" style="color:#9fbf9a;text-decoration:none">N00B@invokehoneybadger.com</a></small>
+              <small>Email: <a href="mailto:hi@invokehoneybadger.com" style="color:#9fbf9a;text-decoration:none">hi@invokehoneybadger.com</a></small>
               <div class="social" aria-hidden="true">
+                <a href="https://github.com/invokehoneybadger" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://x.com/InvokHonyBadgr" target="_blank" rel="noopener noreferrer">X</a>
               </div>
             </div>
+
+            <!-- Signature / Tribute -->
+            <div class="signature" role="note" aria-label="Signature phrase">
+              <span class="sig-emoji" aria-hidden="true">🦾</span>
+              <span class="sig-text">“Inspired by live tradecraft. Hardened by real-world ops. Built in the shadows.” <span class="sig-nod">— R.M.</span></span>
+            </div>
+
           </div>
         </div>
 
-        <footer>© <span id="year"></span> InvokeHoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>
+        <footer>© <span id="year"></span> Invoke HoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>
       </div>
     </div>
   </div>
@@ -175,22 +187,21 @@
   const ctx = canvas.getContext('2d');
   let W = canvas.width = innerWidth;
   let H = canvas.height = innerHeight;
-  const cols = Math.floor(W / 16);
-  const ypos = Array(cols).fill(0);
+  let cols = Math.floor(W / 16);
+  let ypos = new Array(cols).fill(0);
 
-function resize() {
-  W = canvas.width = innerWidth;
-  H = canvas.height = innerHeight;
-  const newCols = Math.floor(W / 16);
-
-  // preserve existing values, expand or shrink responsibly
-  const old = ypos.slice();
-  ypos.length = newCols;
-  for (let i = 0; i < newCols; i++) {
-    if (typeof old[i] !== 'undefined') ypos[i] = old[i];
-    else ypos[i] = Math.random() * (H / 16);
+  function resize() {
+    W = canvas.width = innerWidth;
+    H = canvas.height = innerHeight;
+    const newCols = Math.max(2, Math.floor(W / 16));
+    const old = ypos.slice();
+    ypos = new Array(newCols);
+    for (let i = 0; i < newCols; i++) {
+      if (typeof old[i] !== 'undefined') ypos[i] = old[i];
+      else ypos[i] = Math.random() * (H / 16);
+    }
+    cols = newCols;
   }
-}
   addEventListener('resize', resize);
 
   function matrixFrame() {
@@ -262,10 +273,5 @@ function resize() {
 /* fill year */
 document.getElementById('year').textContent = new Date().getFullYear();
 </script>
-<!-- Signature / Tribute -->
-<div class="signature" role="note" aria-label="Signature phrase">
-  <span class="sig-emoji" aria-hidden="true">🦾</span>
-  <span class="sig-text">“Inspired by live tradecraft. Hardened by real-world ops. Built in the shadows.” <span class="sig-nod">— R.M.</span></span>
-</div>
 </body>
 </html>
