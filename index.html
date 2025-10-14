@@ -27,23 +27,30 @@
   }
 
   html,body{height:100%;margin:0;background:var(--bg);color:#d9e6d6;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; -webkit-font-smoothing:antialiased}
+
   /* canvas background full bleed */
   #matrix-canvas{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,#020202 0%, #041104 60%);display:block}
 
-  /* soft vignette + CRT scan */
-  .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+  /* hexagon overlay (left panel) */
+  #hex-canvas{
+    position:fixed; inset:0; z-index:1; display:block; pointer-events:none;
+    mix-blend-mode:screen;
+  }
+
+  /* soft vignette + CRT scan (raised z-index to sit above hex) */
+  .vignette{position:fixed;inset:0;z-index:2;pointer-events:none;
     background:
       radial-gradient(1200px 600px at 50% 30%, rgba(0,80,20,0.06), transparent 12%),
       linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 100%);
     mix-blend-mode:screen;opacity:0.9;
   }
-  .scanlines{position:fixed;inset:0;z-index:2;pointer-events:none;background:
+  .scanlines{position:fixed;inset:0;z-index:3;pointer-events:none;background:
     repeating-linear-gradient(180deg, rgba(0,0,0,0.02) 0 1px, rgba(0,0,0,0) 1px 4px);
     mix-blend-mode:overlay;opacity:0.55;
   }
 
   /* container */
-  .wrap{position:relative;z-index:3;min-height:100%;display:flex;align-items:center;justify-content:center;padding:28px}
+  .wrap{position:relative;z-index:4;min-height:100%;display:flex;align-items:center;justify-content:center;padding:28px}
   .card{width:100%;max-width:1080px;background:var(--card-bg);border-radius:12px;padding:22px;border:1px solid var(--card-border);box-shadow:0 16px 60px rgba(0,0,0,0.8);backdrop-filter: blur(4px);display:flex;gap:18px;align-items:stretch}
   
   /* terminal column */
@@ -83,28 +90,16 @@
     display:flex;
     gap:10px;
     align-items:center;
-    color:#bfe6b7;            /* pale green that fits the terminal palette */
+    color:#bfe6b7;
     font-size:13px;
     line-height:1.2;
     opacity:0.95;
     font-style:italic;
     text-shadow: 0 1px 0 rgba(0,0,0,0.6);
   }
-
-  .signature .sig-emoji{
-    font-size:18px;
-    transform:translateY(1px);
-  }
-
+  .signature .sig-emoji{ font-size:18px; transform:translateY(1px); }
   .signature .sig-text{ font-style:italic; }
-
-  .signature .sig-nod{
-    margin-left:8px;
-    font-style:normal;
-    color:var(--muted);
-    font-weight:600;
-    letter-spacing:0.02em;
-  }
+  .signature .sig-nod{ margin-left:8px; font-style:normal; color:var(--muted); font-weight:600; letter-spacing:0.02em; }
 
   /* responsive */
   @media (max-width:920px){
@@ -126,6 +121,8 @@
 <body>
   <!-- Matrix canvas background -->
   <canvas id="matrix-canvas" aria-hidden="true"></canvas>
+  <!-- Hexagon overlay (left side only) -->
+  <canvas id="hex-canvas" aria-hidden="true"></canvas>
   <div class="vignette" aria-hidden="true"></div>
   <div class="scanlines" aria-hidden="true"></div>
 
@@ -157,18 +154,17 @@
             <div class="meta">
               <span class="handle">@InvokHonyBadgr</span>
               <small>Email: <a href="mailto:david@invokehoneybadger.com" style="color:#9fbf9a;text-decoration:none">hi@invokehoneybadger.com</a></small>
-              <div class="social" aria-hidden="true">
-              </div>
+              <div class="social" aria-hidden="true"></div>
             </div>
           </div>
         </div>
 
         <footer>© <span id="year"></span> InvokeHoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>     
-            <!-- Signature / Tribute -->
-            <div class="signature" role="note" aria-label="Signature phrase">
-              <span class="sig-emoji" aria-hidden="true">🦾</span>
-              <span class="sig-text">Inspired by live tradecraft. Hardened by real-world ops. Built in the shadows.<span class="sig-nod">— R.M.</span></span>
-            </div>
+        <!-- Signature / Tribute -->
+        <div class="signature" role="note" aria-label="Signature phrase">
+          <span class="sig-emoji" aria-hidden="true">🦾</span>
+          <span class="sig-text">Inspired by live tradecraft. Hardened by real-world ops. Built in the shadows.<span class="sig-nod">— R.M.</span></span>
+        </div>
       </div>
     </div>
   </div>
@@ -232,6 +228,158 @@
   matrixFrame();
 })();
 
+/* HEX MATRIX — animated hexagon streams on the left side
+   - Streams of hexes fall vertically (like Matrix)
+   - Faint trail via translucent fill
+   - Mix of outline/filled, yellow/green, varied size/speed
+*/
+(() => {
+  const canvas = document.getElementById('hex-canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Colors from your CSS variables
+  const YELLOW = getComputedStyle(document.documentElement).getPropertyValue('--hbv-yellow').trim() || '#FFF244';
+  const GREEN  = getComputedStyle(document.documentElement).getPropertyValue('--matrix-green').trim() || '#6af072';
+
+  let W = 0, H = 0, LEFT_W = 0, DPR = 1;
+
+  // Stream + glyph config
+  const LEFT_PORTION = 0.38;     // width of left pane (0-1)
+  const TRAIL_ALPHA  = 0.13;     // lower = longer trails
+  const BASE_SPACING = 22;       // base horizontal spacing between streams (px before DPR)
+  const SPEED_MIN    = 0.6;      // min speed (px per frame, before DPR)
+  const SPEED_MAX    = 1.8;      // max speed
+  const HEAD_GLOW    = 9;        // px shadow blur on stream head
+  const GLYPH_STEPS  = 9;        // number of hexes per stream (visible train length)
+
+  let streams = [];
+
+  function hexPath(cx, cy, r) {
+    const a = Math.PI / 3; // 60°
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const x = cx + r * Math.cos(a * i);
+      const y = cy + r * Math.sin(a * i);
+      (i === 0) ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+  }
+  function choice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function rand(min, max){ return Math.random() * (max - min) + min; }
+
+  function rebuildStreams() {
+    streams.length = 0;
+    const spacing = Math.max(16, BASE_SPACING * (W / 1280));
+    const count = Math.max(12, Math.floor(LEFT_W / spacing));
+    for (let i = 0; i < count; i++) {
+      const x = Math.round((i + 0.5) * (LEFT_W / count) + rand(-6, 6));
+      const r = rand(8, 18) * (W / 1280 + 0.6);
+      const v = rand(SPEED_MIN, SPEED_MAX) * DPR;
+      const color = choice([YELLOW, GREEN]);
+      const pattern = Math.random() < 0.5 ? 'outline-first' : 'fill-first';
+      streams.push({ x, y: rand(-H, 0), r, v, color, pattern, offset: Math.floor(rand(0, GLYPH_STEPS)) });
+    }
+  }
+
+  function resize() {
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    W = Math.floor(innerWidth);
+    H = Math.floor(innerHeight);
+    LEFT_W = Math.floor(W * LEFT_PORTION);
+
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+    rebuildStreams();
+    ctx.clearRect(0, 0, W, H);
+  }
+
+  function hexToRgba(hex, a) {
+    let r=255,g=242,b=68; // default yellow
+    if (/^#([0-9a-f]{3}){1,2}$/i.test(hex)) {
+      let c = hex.substring(1);
+      if (c.length === 3) c = c.split('').map(ch => ch+ch).join('');
+      r = parseInt(c.substr(0,2),16);
+      g = parseInt(c.substr(2,2),16);
+      b = parseInt(c.substr(4,2),16);
+    }
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  function drawHex(cx, cy, r, filled, color, alpha, glow=false) {
+    ctx.save();
+    if (glow) {
+      ctx.shadowColor = color;
+      ctx.shadowBlur = HEAD_GLOW;
+    }
+    hexPath(cx, cy, r);
+
+    if (filled) {
+      const fallback = color.startsWith('#') ? hexToRgba(color, alpha) : `rgba(255,242,68,${alpha})`;
+      ctx.fillStyle = fallback;
+      ctx.fill();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = color === YELLOW ? 'rgba(255,242,68,0.25)' : 'rgba(106,240,114,0.25)';
+      ctx.stroke();
+    } else {
+      ctx.lineWidth = choice([1,1,1.5,2]);
+      ctx.strokeStyle = color === YELLOW ? `rgba(255,242,68,${alpha})` : `rgba(106,240,114,${alpha})`;
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function tick() {
+    // trail fade over left pane
+    ctx.fillStyle = `rgba(0,0,0,${TRAIL_ALPHA})`;
+    ctx.fillRect(0, 0, LEFT_W, H);
+
+    for (const s of streams) {
+      s.y += s.v;
+      if (s.y - GLYPH_STEPS * s.r * 1.7 > H) {
+        s.y = -Math.random() * (H * 0.5);
+        s.r = Math.random() * (18 - 8) + 8 * (W / 1280 + 0.6);
+        s.v = rand(SPEED_MIN, SPEED_MAX) * DPR;
+        s.color = choice([YELLOW, GREEN]);
+        s.pattern = Math.random() < 0.5 ? 'outline-first' : 'fill-first';
+        s.offset = Math.floor(rand(0, GLYPH_STEPS));
+      }
+
+      const step = s.r * 1.7;
+      for (let i = 0; i < GLYPH_STEPS; i++) {
+        const y = s.y - i * step;
+        if (y < -s.r || y > H + s.r) continue;
+        const alpha = Math.max(0, 0.12 - i * (0.12 / GLYPH_STEPS)) + (i === 0 ? 0.08 : 0);
+        const filled = s.pattern === 'fill-first'
+          ? ((i + s.offset) % 2 === 0)
+          : ((i + s.offset) % 2 === 1);
+        const isHead = (i === 0);
+        drawHex(s.x, y, s.r, filled, s.color, alpha, isHead);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  let raf, throttle;
+  function onResize() {
+    cancelAnimationFrame(raf);
+    clearTimeout(throttle);
+    throttle = setTimeout(() => {
+      resize();
+      raf = requestAnimationFrame(tick);
+    }, 80);
+  }
+
+  addEventListener('resize', onResize, { passive: true });
+  resize();
+  requestAnimationFrame(tick);
+})();
+</script>
+
+<script>
 /* TERMINAL STREAM (left panel)
    Push lines into the term pre element to animate a live stream.
 */
@@ -255,13 +403,11 @@
     const now = new Date().toISOString().replace('T',' ').replace('Z','');
     const line = `[${now}] ${lines[idx++ % lines.length]}`;
     el.textContent = (el.textContent + '\n' + line).split('\n').slice(-16).join('\n');
-    // small highlight flash
     el.style.opacity = 0.92;
     setTimeout(()=> el.style.opacity = 1, 80);
   }
 
   setInterval(pushLine, 1200);
-  // seed a few lines
   for (let i=0;i<6;i++) setTimeout(pushLine, i*120);
 })();
 
