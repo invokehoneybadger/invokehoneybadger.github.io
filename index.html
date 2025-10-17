@@ -12,7 +12,7 @@
 <!-- OG (edit og:image if you add one) -->
 <meta property="og:title" content="InvokeHoneyBadger — HBV" />
 <meta property="og:description" content="Red-team tooling, recon frameworks, and HBV community resources." />
-<meta property="og:url" content="https://invokehoneybadger.com" />
+<meta property="og:url" content="https://invokehoneybadger.github.io" />
 <meta name="twitter:card" content="summary_large_image" />
 
 <style>
@@ -130,7 +130,7 @@
   .link-title{font-weight:800; color:#e9ffe6; font-size:14px}
   .link-sub{color:#9fbf9a; font-size:12px}
   .ext{color:var(--accent); font-weight:700; margin-left:6px}
-
+  
   footer{margin-top:8px;color:#9fbf9a;font-size:13px;text-align:center}
 
   /* Signature / tribute styling */
@@ -275,6 +275,17 @@
             </a>
           </div>
         </div>
+          <!-- HBV Boot Banner (move inside .main, above footer) -->
+          <div id="hbvBootBar"
+               style="background-color:#0b0b0b;color:#FFF244;font-family:'Courier New', monospace;text-align:center;padding:10px;border:1px solid #FFF244;border-radius:6px;width:300px;margin:10px 0 0 auto;margin-left:auto;margin-right:auto;opacity:0;transform:translateY(-10px);transition:opacity 1.2s ease, transform 1.2s ease;box-shadow:0 0 15px #FFF244;">
+            HBV&gt; Terminal Online _
+          </div>
+          
+          <!-- HBV Terminal-Style Visitor Counter (move inside .main, below boot bar) -->
+          <div id="hbvCounter" aria-live="polite"
+               style="background-color:#030304;color:#FFF244;font-family:'Courier New', monospace;text-align:center;padding:8px 0;border:1px solid #FFF244;border-radius:6px;width:280px;margin:12px auto 20px;box-shadow:0 0 12px #FFF244;">
+            HBV&gt; Initializing visitor counter...
+          </div>
 
         <footer>© <span id="year"></span> InvokeHoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>     
         <!-- Signature / Tribute -->
@@ -427,24 +438,6 @@
 /* fill year */
 document.getElementById('year').textContent = new Date().getFullYear();
 </script>
-<!-- HBV Boot Banner -->
-<div id="hbvBootBar"
-     style="background-color:#0b0b0b;
-            color:#FFF244;
-            font-family:'Courier New', monospace;
-            text-align:center;
-            padding:10px;
-            border:1px solid #FFF244;
-            border-radius:6px;
-            width:300px;
-            margin:10px auto;
-            opacity:0;
-            transform:translateY(-10px);
-            transition:opacity 1.2s ease, transform 1.2s ease;
-            box-shadow:0 0 15px #FFF244;">
-  HBV&gt; Terminal Online _
-</div>
-
 <script>
 window.addEventListener("load", () => {
   const bar = document.getElementById("hbvBootBar");
@@ -462,21 +455,6 @@ window.addEventListener("load", () => {
   }, 600);
 });
 </script>
-
-<!-- HBV Terminal-Style Visitor Counter -->
-<div id="hbvCounter" 
-     style="background-color:#030304;
-            color:#FFF244;
-            font-family:'Courier New', monospace;
-            text-align:center;
-            padding:8px 0;
-            border:1px solid #FFF244;
-            border-radius:6px;
-            width:280px;
-            margin:20px auto;
-            box-shadow:0 0 12px #FFF244;">
-  HBV&gt; Initializing visitor counter...
-</div>
 <script>
 (async () => {
   const el = document.getElementById("hbvCounter");
