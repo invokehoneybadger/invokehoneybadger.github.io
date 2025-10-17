@@ -433,7 +433,7 @@
   function pushLine() {
     const now = new Date().toISOString().replace('T',' ').replace('Z','');
     const line = `[${now}] ${lines[idx++ % lines.length]}`;
-    el.textContent = (el.textContent + '\n' + line).split('\n').slice(-10).join('\n');
+    el.textContent = (el.textContent + '\n' + line).split('\n').slice(-16).join('\n');
     el.style.opacity = 0.92;
     setTimeout(()=> el.style.opacity = 1, 80);
   }
