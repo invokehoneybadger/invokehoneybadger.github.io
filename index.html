@@ -24,6 +24,7 @@
     --matrix-dark:#0b2510;
     --card-bg: rgba(3,4,6,0.72);
     --card-border: rgba(100,255,140,0.06);
+    --accent:#3aa0ff;
   }
 
   html,body{height:100%;margin:0;background:var(--bg);color:#d9e6d6;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; -webkit-font-smoothing:antialiased}
@@ -51,7 +52,7 @@
 
   /* container */
   .wrap{position:relative;z-index:4;min-height:100%;display:flex;align-items:center;justify-content:center;padding:28px}
-  .card{width:100%;max-width:1080px;background:var(--card-bg);border-radius:12px;padding:22px;border:1px solid var(--card-border);box-shadow:0 16px 60px rgba(0,0,0,0.8);backdrop-filter: blur(4px);display:flex;gap:18px;align-items:stretch}
+  .card{width:100%;max-width:1080px;background:var(--card-bg);border-radius:12px;padding:22px;border:1px solid var(--card-border);box-shadow:0 16px 60px rgba(0,0,0,0.8);backdrop-filter: blur(4px);display:flex;gap:18px;align-items:stretch; position:relative}
   
   /* terminal column */
   .term{
@@ -63,7 +64,7 @@
   .term pre{margin:0;font-family:inherit;font-size:12px;color:var(--matrix-green);opacity:0.95;white-space:pre-wrap;word-break:break-word}
 
   /* main content */
-  .main{flex:1;display:flex;flex-direction:column;gap:10px;padding:6px 8px}
+  .main{flex:1;display:flex;flex-direction:column;gap:12px;padding:6px 8px}
   .hero{display:flex;gap:18px;align-items:flex-start}
   .logo{width:96px;height:96px;border-radius:12px;background:var(--hbv-yellow);display:flex;align-items:center;justify-content:center;position:relative;color:#0b0c0f;font-weight:900;font-size:28px;flex-shrink:0;box-shadow:0 8px 34px rgba(0,0,0,0.5)}
   .logo .hb{line-height:1;margin:0}
@@ -82,11 +83,48 @@
   .social{margin-left:auto;display:flex;gap:10px;align-items:center}
   .social a{color:#9fbf9a;text-decoration:none;font-size:13px;padding:6px 8px;border-radius:6px}
 
-  footer{margin-top:14px;color:#9fbf9a;font-size:13px;text-align:center}
+  /* HBV Network link grid */
+  .links{
+    background:rgba(12,16,12,0.5);
+    border:1px solid rgba(100,255,140,0.06);
+    border-radius:12px;
+    padding:14px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+  .links h2{
+    margin:0 0 10px 0;
+    font-size:16px;
+    color:#cdecca;
+    letter-spacing:.02em
+  }
+  .links-grid{
+    display:grid; gap:10px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .link-card{
+    display:flex; align-items:center; gap:10px;
+    padding:12px; border-radius:10px;
+    background:linear-gradient(180deg,#0b0d0b, #0a0c0a);
+    border:1px solid rgba(100,255,140,0.06);
+    text-decoration:none; color:#cfe7cc;
+    transition: transform .12s ease, border-color .12s ease;
+  }
+  .link-card:hover{ transform: translateY(-2px); border-color: rgba(255,242,68,0.35); }
+  .link-icon{
+    width:30px;height:30px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,242,68,0.1); color:var(--hbv-yellow); font-weight:900
+  }
+  .link-text{display:flex;flex-direction:column;line-height:1.2}
+  .link-title{font-weight:800; color:#e9ffe6; font-size:14px}
+  .link-sub{color:#9fbf9a; font-size:12px}
+  .ext{color:var(--accent); font-weight:700; margin-left:6px}
+
+  footer{margin-top:8px;color:#9fbf9a;font-size:13px;text-align:center}
 
   /* Signature / tribute styling */
   .signature{
-    margin-top:14px;
+    margin-top:8px;
     display:flex;
     gap:10px;
     align-items:center;
@@ -143,7 +181,7 @@
 
           <div style="flex:1">
             <h1 id="site-title">InvokeHoneyBadger</h1>
-            <p class="lead">Origins of <strong>HoneyBadger Vanguard (HBV)</strong> — red-team tooling, recon frameworks, and HBV community resources. Site & repo launching soon. Want early access or to collaborate?</p>
+            <p class="lead">Origins of <strong>HoneyBadger Vanguard (HBV)</strong> — red-team tooling, recon frameworks, and HBV community resources.</p>
 
             <div class="cta">
               <a class="btn btn-solid" href="mailto:david@invokehoneybadger.com">Get updates</a>
@@ -159,6 +197,66 @@
           </div>
         </div>
 
+        <!-- HBV Network Links -->
+        <div class="links" aria-label="HBV Network">
+          <h2>HBV Network</h2>
+          <div class="links-grid">
+            <a class="link-card" href="https://api.invokehoneybadger.com" target="_blank" rel="noopener">
+              <span class="link-icon">API</span>
+              <span class="link-text">
+                <span class="link-title">API Gateway</span>
+                <span class="link-sub">api.invokehoneybadger.com</span>
+              </span>
+              <span class="ext" aria-hidden="true">↗</span>
+            </a>
+
+            <a class="link-card" href="https://portal.invokehoneybadger.com" target="_blank" rel="noopener">
+              <span class="link-icon">PRT</span>
+              <span class="link-text">
+                <span class="link-title">Portal</span>
+                <span class="link-sub">Operations dashboard</span>
+              </span>
+              <span class="ext" aria-hidden="true">↗</span>
+            </a>
+
+            <a class="link-card" href="https://shop.invokehoneybadger.com" target="_blank" rel="noopener">
+              <span class="link-icon">SHP</span>
+              <span class="link-text">
+                <span class="link-title">Shop</span>
+                <span class="link-sub">Official HBV merch</span>
+              </span>
+              <span class="ext" aria-hidden="true">↗</span>
+            </a>
+
+            <a class="link-card" href="https://invokehoneybadger.com" target="_blank" rel="noopener">
+              <span class="link-icon">WWW</span>
+              <span class="link-text">
+                <span class="link-title">Main Site</span>
+                <span class="link-sub">invokehoneybadger.com</span>
+              </span>
+              <span class="ext" aria-hidden="true">↗</span>
+            </a>
+
+            <a class="link-card" href="https://github.com/invokehoneybadger" target="_blank" rel="noopener">
+              <span class="link-icon">GH</span>
+              <span class="link-text">
+                <span class="link-title">GitHub Org</span>
+                <span class="link-sub">source & releases</span>
+              </span>
+              <span class="ext" aria-hidden="true">↗</span>
+            </a>
+
+            <a class="link-card" href="https://x.com/InvokHonyBadgr" target="_blank" rel="noopener">
+              <span class="link-icon">X</span>
+              <span class="link-text">
+                <span class="link-title">X / Updates</span>
+                <span class="link-sub">@InvokHonyBadgr</span>
+              </span>
+              <span class="ext" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+
         <footer>© <span id="year"></span> InvokeHoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>     
         <!-- Signature / Tribute -->
         <div class="signature" role="note" aria-label="Signature phrase">
@@ -170,9 +268,7 @@
   </div>
 
 <script>
-/* MATRIX CANVAS
-   Lightweight matrix rain effect with responsive sizing.
-*/
+/* MATRIX CANVAS */
 (() => {
   const canvas = document.getElementById('matrix-canvas');
   const ctx = canvas.getContext('2d');
@@ -180,7 +276,6 @@
   let H = canvas.height = innerHeight;
   let cols = Math.floor(W / 16);
   let ypos = new Array(cols).fill(0);
-
   function resize() {
     W = canvas.width = innerWidth;
     H = canvas.height = innerHeight;
@@ -194,195 +289,96 @@
     cols = newCols;
   }
   addEventListener('resize', resize);
-
   function matrixFrame() {
-    // translucent background to create trail effect
     ctx.fillStyle = 'rgba(2,6,2,0.18)';
     ctx.fillRect(0, 0, W, H);
-
     ctx.font = '12px "Roboto Mono", "Courier New", monospace';
     for (let i = 0; i < ypos.length; i++) {
-      const text = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96)); // katakana-like runes
+      const text = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96));
       const x = i * 16;
       const y = ypos[i] * 16;
-
-      // bright head
       ctx.fillStyle = 'rgba(180,255,190,0.95)';
       ctx.fillText(text, x, y);
-
-      // faded trail
       for (let t = 1; t < 5; t++) {
         ctx.fillStyle = `rgba(90,180,110,${0.12 * (5 - t)})`;
         ctx.fillText(text, x, y - t * 16);
       }
-
       if ((y > H && Math.random() > 0.975) || (Math.random() > 0.9999)) {
         ypos[i] = 0;
       } else {
         ypos[i] = ypos[i] + 0.85;
       }
     }
-
     requestAnimationFrame(matrixFrame);
   }
   matrixFrame();
 })();
 
-/* HEX MATRIX — animated hexagon streams on the left side
-   - Streams of hexes fall vertically (like Matrix)
-   - Faint trail via translucent fill
-   - Mix of outline/filled, yellow/green, varied size/speed
-*/
+/* HEX MATRIX (left pane) */
 (() => {
   const canvas = document.getElementById('hex-canvas');
   const ctx = canvas.getContext('2d');
-
-  // Colors from your CSS variables
   const YELLOW = getComputedStyle(document.documentElement).getPropertyValue('--hbv-yellow').trim() || '#FFF244';
   const GREEN  = getComputedStyle(document.documentElement).getPropertyValue('--matrix-green').trim() || '#6af072';
-
   let W = 0, H = 0, LEFT_W = 0, DPR = 1;
-
-  // Stream + glyph config
-  const LEFT_PORTION = 0.38;     // width of left pane (0-1)
-  const TRAIL_ALPHA  = 0.13;     // lower = longer trails
-  const BASE_SPACING = 22;       // base horizontal spacing between streams (px before DPR)
-  const SPEED_MIN    = 0.6;      // min speed (px per frame, before DPR)
-  const SPEED_MAX    = 1.8;      // max speed
-  const HEAD_GLOW    = 9;        // px shadow blur on stream head
-  const GLYPH_STEPS  = 9;        // number of hexes per stream (visible train length)
-
+  const LEFT_PORTION = 0.38, TRAIL_ALPHA=0.13, BASE_SPACING=22, SPEED_MIN=0.6, SPEED_MAX=1.8, HEAD_GLOW=9, GLYPH_STEPS=9;
   let streams = [];
-
   function hexPath(cx, cy, r) {
-    const a = Math.PI / 3; // 60°
-    ctx.beginPath();
-    for (let i = 0; i < 6; i++) {
-      const x = cx + r * Math.cos(a * i);
-      const y = cy + r * Math.sin(a * i);
-      (i === 0) ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    }
+    const a = Math.PI / 3; ctx.beginPath();
+    for (let i=0;i<6;i++){ const x=cx+r*Math.cos(a*i), y=cy+r*Math.sin(a*i); i?ctx.lineTo(x,y):ctx.moveTo(x,y); }
     ctx.closePath();
   }
-  function choice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-  function rand(min, max){ return Math.random() * (max - min) + min; }
-
-  function rebuildStreams() {
-    streams.length = 0;
-    const spacing = Math.max(16, BASE_SPACING * (W / 1280));
-    const count = Math.max(12, Math.floor(LEFT_W / spacing));
-    for (let i = 0; i < count; i++) {
-      const x = Math.round((i + 0.5) * (LEFT_W / count) + rand(-6, 6));
-      const r = rand(8, 18) * (W / 1280 + 0.6);
-      const v = rand(SPEED_MIN, SPEED_MAX) * DPR;
-      const color = choice([YELLOW, GREEN]);
-      const pattern = Math.random() < 0.5 ? 'outline-first' : 'fill-first';
-      streams.push({ x, y: rand(-H, 0), r, v, color, pattern, offset: Math.floor(rand(0, GLYPH_STEPS)) });
+  function choice(a){return a[Math.floor(Math.random()*a.length)]} function rand(min,max){return Math.random()*(max-min)+min}
+  function rebuild() {
+    streams.length=0;
+    const spacing=Math.max(16, BASE_SPACING*(W/1280));
+    const count=Math.max(12, Math.floor(LEFT_W/spacing));
+    for(let i=0;i<count;i++){
+      const x=Math.round((i+0.5)*(LEFT_W/count)+rand(-6,6));
+      const r=rand(8,18)*(W/1280+0.6);
+      const v=rand(SPEED_MIN,SPEED_MAX)*DPR;
+      const color=choice([YELLOW,GREEN]);
+      const pattern=Math.random()<0.5?'outline-first':'fill-first';
+      streams.push({x, y:rand(-H,0), r, v, color, pattern, offset:Math.floor(rand(0,GLYPH_STEPS))});
     }
   }
-
-  function resize() {
-    DPR = Math.min(2, window.devicePixelRatio || 1);
-    W = Math.floor(innerWidth);
-    H = Math.floor(innerHeight);
-    LEFT_W = Math.floor(W * LEFT_PORTION);
-
-    canvas.width = Math.floor(W * DPR);
-    canvas.height = Math.floor(H * DPR);
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-
-    rebuildStreams();
-    ctx.clearRect(0, 0, W, H);
+  function resize(){
+    DPR=Math.min(2, devicePixelRatio||1);
+    W=canvas.width=innerWidth; H=canvas.height=innerHeight; LEFT_W=Math.floor(W*LEFT_PORTION);
+    canvas.width=Math.floor(W*DPR); canvas.height=Math.floor(H*DPR);
+    canvas.style.width=W+'px'; canvas.style.height=H+'px'; ctx.setTransform(DPR,0,0,DPR,0,0);
+    rebuild(); ctx.clearRect(0,0,W,H);
   }
-
-  function hexToRgba(hex, a) {
-    let r=255,g=242,b=68; // default yellow
-    if (/^#([0-9a-f]{3}){1,2}$/i.test(hex)) {
-      let c = hex.substring(1);
-      if (c.length === 3) c = c.split('').map(ch => ch+ch).join('');
-      r = parseInt(c.substr(0,2),16);
-      g = parseInt(c.substr(2,2),16);
-      b = parseInt(c.substr(4,2),16);
-    }
-    return `rgba(${r},${g},${b},${a})`;
-  }
-
-  function drawHex(cx, cy, r, filled, color, alpha, glow=false) {
+  function hexToRgba(hex,a){let r=255,g=242,b=68;if(/^#([0-9a-f]{3}){1,2}$/i.test(hex)){let c=hex.substring(1);if(c.length===3)c=c.split('').map(ch=>ch+ch).join('');r=parseInt(c.substr(0,2),16);g=parseInt(c.substr(2,2),16);b=parseInt(c.substr(4,2),16);} return `rgba(${r},${g},${b},${a})`; }
+  function drawHex(cx,cy,r,filled,color,alpha,glow=false){
     ctx.save();
-    if (glow) {
-      ctx.shadowColor = color;
-      ctx.shadowBlur = HEAD_GLOW;
-    }
-    hexPath(cx, cy, r);
-
-    if (filled) {
-      const fallback = color.startsWith('#') ? hexToRgba(color, alpha) : `rgba(255,242,68,${alpha})`;
-      ctx.fillStyle = fallback;
-      ctx.fill();
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = color === YELLOW ? 'rgba(255,242,68,0.25)' : 'rgba(106,240,114,0.25)';
-      ctx.stroke();
-    } else {
-      ctx.lineWidth = choice([1,1,1.5,2]);
-      ctx.strokeStyle = color === YELLOW ? `rgba(255,242,68,${alpha})` : `rgba(106,240,114,${alpha})`;
-      ctx.stroke();
-    }
+    if(glow){ctx.shadowColor=color;ctx.shadowBlur=HEAD_GLOW;}
+    hexPath(cx,cy,r);
+    if(filled){const fallback=color.startsWith('#')?hexToRgba(color,alpha):`rgba(255,242,68,${alpha})`; ctx.fillStyle=fallback; ctx.fill(); ctx.lineWidth=1; ctx.strokeStyle=color===YELLOW?'rgba(255,242,68,0.25)':'rgba(106,240,114,0.25)'; ctx.stroke();}
+    else{ctx.lineWidth=[1,1,1.5,2][Math.floor(Math.random()*4)]; ctx.strokeStyle=color===YELLOW?`rgba(255,242,68,${alpha})`:`rgba(106,240,114,${alpha})`; ctx.stroke();}
     ctx.restore();
   }
-
-  function tick() {
-    // trail fade over left pane
-    ctx.fillStyle = `rgba(0,0,0,${TRAIL_ALPHA})`;
-    ctx.fillRect(0, 0, LEFT_W, H);
-
-    for (const s of streams) {
-      s.y += s.v;
-      if (s.y - GLYPH_STEPS * s.r * 1.7 > H) {
-        s.y = -Math.random() * (H * 0.5);
-        s.r = Math.random() * (18 - 8) + 8 * (W / 1280 + 0.6);
-        s.v = rand(SPEED_MIN, SPEED_MAX) * DPR;
-        s.color = choice([YELLOW, GREEN]);
-        s.pattern = Math.random() < 0.5 ? 'outline-first' : 'fill-first';
-        s.offset = Math.floor(rand(0, GLYPH_STEPS));
-      }
-
-      const step = s.r * 1.7;
-      for (let i = 0; i < GLYPH_STEPS; i++) {
-        const y = s.y - i * step;
-        if (y < -s.r || y > H + s.r) continue;
-        const alpha = Math.max(0, 0.12 - i * (0.12 / GLYPH_STEPS)) + (i === 0 ? 0.08 : 0);
-        const filled = s.pattern === 'fill-first'
-          ? ((i + s.offset) % 2 === 0)
-          : ((i + s.offset) % 2 === 1);
-        const isHead = (i === 0);
-        drawHex(s.x, y, s.r, filled, s.color, alpha, isHead);
+  function tick(){
+    ctx.fillStyle=`rgba(0,0,0,${TRAIL_ALPHA})`; ctx.fillRect(0,0,LEFT_W,H);
+    for(const s of streams){
+      s.y+=s.v; if(s.y-GLYPH_STEPS*s.r*1.7>H){ s.y=-Math.random()*(H*.5); s.r=Math.random()*(18-8)+8*(W/1280+0.6); s.v=rand(SPEED_MIN,SPEED_MAX)*DPR; s.color=choice([YELLOW,GREEN]); s.pattern=Math.random()<0.5?'outline-first':'fill-first'; s.offset=Math.floor(rand(0,GLYPH_STEPS)); }
+      const step=s.r*1.7;
+      for(let i=0;i<GLYPH_STEPS;i++){
+        const y=s.y-i*step; if(y<-s.r||y>H+s.r) continue;
+        const alpha=Math.max(0,0.12-i*(0.12/GLYPH_STEPS))+(i===0?0.08:0);
+        const filled=s.pattern==='fill-first'?((i+s.offset)%2===0):((i+s.offset)%2===1);
+        drawHex(s.x,y,s.r,filled,s.color,alpha,i===0);
       }
     }
     requestAnimationFrame(tick);
   }
-
-  let raf, throttle;
-  function onResize() {
-    cancelAnimationFrame(raf);
-    clearTimeout(throttle);
-    throttle = setTimeout(() => {
-      resize();
-      raf = requestAnimationFrame(tick);
-    }, 80);
-  }
-
-  addEventListener('resize', onResize, { passive: true });
-  resize();
-  requestAnimationFrame(tick);
+  let raf, throttle; function onResize(){ cancelAnimationFrame(raf); clearTimeout(throttle); throttle=setTimeout(()=>{resize(); raf=requestAnimationFrame(tick);},80); }
+  addEventListener('resize', onResize, {passive:true}); resize(); requestAnimationFrame(tick);
 })();
 </script>
 
 <script>
-/* TERMINAL STREAM (left panel)
-   Push lines into the term pre element to animate a live stream.
-*/
+/* TERMINAL STREAM (left panel) */
 (() => {
   const el = document.getElementById('term-stream');
   const lines = [
@@ -398,7 +394,6 @@
     'note: keep operations compartmentalized'
   ];
   let idx = 0;
-
   function pushLine() {
     const now = new Date().toISOString().replace('T',' ').replace('Z','');
     const line = `[${now}] ${lines[idx++ % lines.length]}`;
@@ -406,11 +401,9 @@
     el.style.opacity = 0.92;
     setTimeout(()=> el.style.opacity = 1, 80);
   }
-
   setInterval(pushLine, 1200);
   for (let i=0;i<6;i++) setTimeout(pushLine, i*120);
 })();
-
 /* fill year */
 document.getElementById('year').textContent = new Date().getFullYear();
 </script>
