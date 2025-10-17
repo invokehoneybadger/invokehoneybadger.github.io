@@ -280,7 +280,8 @@
           </div>
         </div>
           <!-- HBV Boot Banner (move inside .main, above footer) -->
-          <div id="hbvBootBar"
+      <div style="display:flex;flex-direction:column;align-items:center;">  
+        <div id="hbvBootBar"
                style="background-color:#0b0b0b;color:#FFF244;font-family:'Courier New', monospace;text-align:center;padding:10px;border:1px solid #FFF244;border-radius:6px;width:300px;margin:10px 0 0 auto;margin-left:auto;margin-right:auto;opacity:0;transform:translateY(-10px);transition:opacity 1.2s ease, transform 1.2s ease;box-shadow:0 0 15px #FFF244;">
             HBV&gt; Terminal Online _
           </div>
@@ -289,10 +290,7 @@
                style="background-color:#030304;color:#FFF244;font-family:'Courier New', monospace;text-align:center;padding:8px 0;border:1px solid #FFF244;border-radius:6px;width:280px;margin:12px auto 20px;box-shadow:0 0 12px #FFF244;">
             HBV&gt; Initializing visitor counter...
           </div>
-          <div style="display:flex;flex-direction:column;align-items:center;">
-            <div id="hbvBootBar">…</div>
-            <div id="hbvCounter">…</div>
-          </div>
+     </div>
 
         <footer>© <span id="year"></span> InvokeHoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>     
         <!-- Signature / Tribute -->
@@ -465,29 +463,31 @@ window.addEventListener("load", () => {
 <script>
 (async () => {
   const el = document.getElementById("hbvCounter");
+  const ns = "invokehoneybadger.github.io";
+  const key = "visits";
+  const url = `https://api.countapi.xyz/hit/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`;
 
-  // 1) Try CountAPI (JSON + CORS-friendly)
+  // Timeout so we don't hang if blocked
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), 2500);
+
   try {
-    const ns = "invokehoneybadger.github.io";
-    const key = "visits"; // arbitrary key name within the namespace
-    const url = `https://api.countapi.xyz/hit/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`;
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error("CountAPI HTTP " + res.status);
+    const res = await fetch(url, { cache: "no-store", signal: controller.signal });
+    if (!res.ok) throw new Error("HTTP " + res.status);
     const data = await res.json();
     if (typeof data.value === "number") {
       el.textContent = `HBV> Visitors logged: ${data.value}`;
       return;
     }
-    throw new Error("CountAPI bad payload");
-  } catch (e) {
-    // 2) Fallback: show the badge inline (no parsing needed)
-    el.innerHTML = `
-      <span style="display:block; margin-bottom:6px;">HBV&gt; Visitors logged:</span>
-      <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Finvokehoneybadger.github.io&count_bg=%23FFF244&title_bg=%23030304&icon=github.svg&icon_color=%23FFF244&title=Visitors&edge_flat=false"
-           alt="HBV site visits badge" style="vertical-align:middle;border-radius:4px;">
-    `;
+    throw new Error("Bad payload");
+  } catch {
+    // Clean terminal-style fallback (no external image)
+    el.textContent = "HBV> Visitors logged: [unavailable]";
+  } finally {
+    clearTimeout(t);
   }
 })();
 </script>
+
 </body>
 </html>
