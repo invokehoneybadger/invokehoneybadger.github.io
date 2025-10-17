@@ -154,6 +154,14 @@
 
   /* subtle glow under card */
   .card::after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:-80px;width:520px;height:260px;border-radius:50%;background:radial-gradient(closest-side, rgba(111,255,146,0.06), rgba(0,0,0,0));filter:blur(40px);opacity:0.95;z-index:2;pointer-events:none}
+
+@keyframes hbvGlow {
+  0%, 100% { box-shadow:0 0 10px #FFF244; }
+  50% { box-shadow:0 0 20px #FFF244; }
+}
+#hbvCounter {
+  animation: hbvGlow 2s infinite;
+}
 </style>
 </head>
 <body>
@@ -408,5 +416,71 @@
 /* fill year */
 document.getElementById('year').textContent = new Date().getFullYear();
 </script>
+<!-- HBV Boot Banner -->
+<div id="hbvBootBar"
+     style="background-color:#0b0b0b;
+            color:#FFF244;
+            font-family:'Courier New', monospace;
+            text-align:center;
+            padding:10px;
+            border:1px solid #FFF244;
+            border-radius:6px;
+            width:300px;
+            margin:10px auto;
+            opacity:0;
+            transform:translateY(-10px);
+            transition:opacity 1.2s ease, transform 1.2s ease;
+            box-shadow:0 0 15px #FFF244;">
+  HBV&gt; Terminal Online _
+</div>
+
+<script>
+window.addEventListener("load", () => {
+  const bar = document.getElementById("hbvBootBar");
+  setTimeout(() => {
+    bar.style.opacity = "1";
+    bar.style.transform = "translateY(0)";
+  }, 500);
+
+  // blinking cursor
+  setInterval(() => {
+    bar.textContent =
+      bar.textContent.endsWith("_")
+        ? "HBV> Terminal Online "
+        : "HBV> Terminal Online _";
+  }, 600);
+});
+</script>
+
+<!-- HBV Terminal-Style Visitor Counter -->
+<div id="hbvCounter" 
+     style="background-color:#030304;
+            color:#FFF244;
+            font-family:'Courier New', monospace;
+            text-align:center;
+            padding:8px 0;
+            border:1px solid #FFF244;
+            border-radius:6px;
+            width:280px;
+            margin:20px auto;
+            box-shadow:0 0 12px #FFF244;">
+  HBV&gt; Initializing visitor counter...
+</div>
+
+<script>
+(async () => {
+  const counterUrl = "https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Finvokehoneybadger.github.io";
+  const res = await fetch(counterUrl);
+  const text = await res.text();
+
+  // Extract the count number from the SVG text
+  const match = text.match(/>(\d+)</);
+  const count = match ? match[1] : "???";
+
+  // Display in terminal style
+  document.getElementById("hbvCounter").textContent = `HBV> Visitors logged: ${count}`;
+})();
+</script>
+
 </body>
 </html>
