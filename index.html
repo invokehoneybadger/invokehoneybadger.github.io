@@ -173,6 +173,10 @@
 #hbvCounter {
   animation: hbvGlow 2s infinite;
 }
+  #hbvBootBar, #hbvCounter {
+  box-shadow: 0 0 8px #FFF244, inset 0 0 3px rgba(255,255,200,0.3);
+}
+
 </style>
 </head>
 <body>
@@ -280,11 +284,14 @@
                style="background-color:#0b0b0b;color:#FFF244;font-family:'Courier New', monospace;text-align:center;padding:10px;border:1px solid #FFF244;border-radius:6px;width:300px;margin:10px 0 0 auto;margin-left:auto;margin-right:auto;opacity:0;transform:translateY(-10px);transition:opacity 1.2s ease, transform 1.2s ease;box-shadow:0 0 15px #FFF244;">
             HBV&gt; Terminal Online _
           </div>
-          
           <!-- HBV Terminal-Style Visitor Counter (move inside .main, below boot bar) -->
           <div id="hbvCounter" aria-live="polite"
                style="background-color:#030304;color:#FFF244;font-family:'Courier New', monospace;text-align:center;padding:8px 0;border:1px solid #FFF244;border-radius:6px;width:280px;margin:12px auto 20px;box-shadow:0 0 12px #FFF244;">
             HBV&gt; Initializing visitor counter...
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <div id="hbvBootBar">…</div>
+            <div id="hbvCounter">…</div>
           </div>
 
         <footer>© <span id="year"></span> InvokeHoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>     
