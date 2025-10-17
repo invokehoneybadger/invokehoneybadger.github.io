@@ -61,8 +61,19 @@
     color:var(--matrix-green);font-size:12.5px;line-height:1.4;overflow:hidden;display:flex;flex-direction:column;gap:8px;
   }
   .term .title{font-weight:700;color:var(--hbv-yellow);letter-spacing:0.04em}
-  .term pre{margin:0;font-family:inherit;font-size:12px;color:var(--matrix-green);opacity:0.95;white-space:pre-wrap;word-break:break-word,line-height:1.4;max-height:calc(20*1.4em),overflow:hidden;}
-
+  /* after (valid; clamps to ~20 lines) */
+.term pre{
+  margin:0;
+  font-family:inherit;
+  font-size:12px;
+  color:var(--matrix-green);
+  opacity:0.95;
+  white-space:pre-wrap;
+  word-break:break-word;
+  line-height:1.4;
+  max-height:calc(20 * 1.4em);
+  overflow:hidden;
+}
   /* main content */
   .main{flex:1;display:flex;flex-direction:column;gap:12px;padding:6px 8px}
   .hero{display:flex;gap:18px;align-items:flex-start}
@@ -406,7 +417,7 @@
   function pushLine() {
     const now = new Date().toISOString().replace('T',' ').replace('Z','');
     const line = `[${now}] ${lines[idx++ % lines.length]}`;
-    el.textContent = (el.textContent + '\n' + line).split('\n').slice(-16).join('\n');
+    el.textContent = (el.textContent + '\n' + line).split('\n').slice(-10).join('\n');
     el.style.opacity = 0.92;
     setTimeout(()=> el.style.opacity = 1, 80);
   }
@@ -466,21 +477,32 @@ window.addEventListener("load", () => {
             box-shadow:0 0 12px #FFF244;">
   HBV&gt; Initializing visitor counter...
 </div>
-
 <script>
 (async () => {
-  const counterUrl = "https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Finvokehoneybadger.github.io";
-  const res = await fetch(counterUrl);
-  const text = await res.text();
+  const el = document.getElementById("hbvCounter");
 
-  // Extract the count number from the SVG text
-  const match = text.match(/>(\d+)</);
-  const count = match ? match[1] : "???";
-
-  // Display in terminal style
-  document.getElementById("hbvCounter").textContent = `HBV> Visitors logged: ${count}`;
+  // 1) Try CountAPI (JSON + CORS-friendly)
+  try {
+    const ns = "invokehoneybadger.github.io";
+    const key = "visits"; // arbitrary key name within the namespace
+    const url = `https://api.countapi.xyz/hit/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`;
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("CountAPI HTTP " + res.status);
+    const data = await res.json();
+    if (typeof data.value === "number") {
+      el.textContent = `HBV> Visitors logged: ${data.value}`;
+      return;
+    }
+    throw new Error("CountAPI bad payload");
+  } catch (e) {
+    // 2) Fallback: show the badge inline (no parsing needed)
+    el.innerHTML = `
+      <span style="display:block; margin-bottom:6px;">HBV&gt; Visitors logged:</span>
+      <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Finvokehoneybadger.github.io&count_bg=%23FFF244&title_bg=%23030304&icon=github.svg&icon_color=%23FFF244&title=Visitors&edge_flat=false"
+           alt="HBV site visits badge" style="vertical-align:middle;border-radius:4px;">
+    `;
+  }
 })();
 </script>
-
 </body>
 </html>
