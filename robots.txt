@@ -1,0 +1,25 @@
+# InvokeHoneyBadger robots.txt
+
+User-agent: *
+Allow: /
+
+# Disallow sensitive or admin paths (if any exist in the future)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Sitemap location
+Sitemap: https://invokehoneybadger.com/sitemap.xml
+
+# Crawl-delay for specific bots (optional, adjust as needed)
+# User-agent: Googlebot
+# Crawl-delay: 0
+
+# Block known bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
