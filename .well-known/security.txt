@@ -1,0 +1,17 @@
+# InvokeHoneyBadger Security Contact Information
+# RFC 9116 Compliant Security.txt
+
+Contact: mailto:security@invokehoneybadger.com
+Contact: mailto:hi@invokehoneybadger.com
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://invokehoneybadger.com/.well-known/security.txt
+
+# Security Policy
+Policy: https://invokehoneybadger.com/SECURITY.md
+
+# Acknowledgments
+Acknowledgments: https://invokehoneybadger.com/SECURITY.md
+
+# Encryption
+# PGP key available upon request at security@invokehoneybadger.com

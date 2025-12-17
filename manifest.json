@@ -1,0 +1,29 @@
+{
+  "name": "InvokeHoneyBadger — HBV",
+  "short_name": "HBV",
+  "description": "HoneyBadger Vanguard — red-team tooling, recon frameworks, and HBV community resources",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030304",
+  "theme_color": "#030304",
+  "orientation": "any",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/invokehoneybadger_favicon_32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/invokehoneybadger_favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["security", "tools", "developer"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false
+}
