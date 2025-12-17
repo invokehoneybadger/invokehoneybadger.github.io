@@ -1,0 +1,98 @@
+name: Optimize Assets
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.css'
+      - '**.js'
+      - '!**.min.css'
+      - '!**.min.js'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  minify:
+    name: Minify CSS and JS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm init -y
+          npm install --save-dev terser csso-cli
+
+      - name: Minify CSS
+        run: |
+          echo "Minifying CSS files..."
+          if [ -f styles.css ]; then
+            npx csso styles.css --output styles.min.css
+            echo "✅ styles.min.css created"
+          fi
+
+      - name: Minify JavaScript
+        run: |
+          echo "Minifying JavaScript files..."
+          for file in js/*.js; do
+            if [[ ! "$file" =~ \.min\.js$ ]]; then
+              filename=$(basename "$file" .js)
+              npx terser "$file" --compress --mangle --output "js/${filename}.min.js"
+              echo "✅ js/${filename}.min.js created"
+            fi
+          done
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit minified files
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add *.min.css js/*.min.js
+          git commit -m "chore: auto-minify CSS and JS assets"
+          git push
+
+      - name: Summary
+        run: |
+          echo "## Asset Optimization Complete :zap:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Minified Files:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f styles.min.css ]; then
+            ORIGINAL=$(wc -c < styles.css | tr -d ' ')
+            MINIFIED=$(wc -c < styles.min.css | tr -d ' ')
+            SAVED=$((ORIGINAL - MINIFIED))
+            PERCENT=$((SAVED * 100 / ORIGINAL))
+            echo "- **styles.css**: ${ORIGINAL} → ${MINIFIED} bytes (${PERCENT}% reduction)" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          for file in js/*.min.js; do
+            if [ -f "$file" ]; then
+              original="${file%.min.js}.js"
+              ORIGINAL=$(wc -c < "$original" | tr -d ' ')
+              MINIFIED=$(wc -c < "$file" | tr -d ' ')
+              SAVED=$((ORIGINAL - MINIFIED))
+              PERCENT=$((SAVED * 100 / ORIGINAL))
+              echo "- **$(basename $original)**: ${ORIGINAL} → ${MINIFIED} bytes (${PERCENT}% reduction)" >> $GITHUB_STEP_SUMMARY
+            fi
+          done

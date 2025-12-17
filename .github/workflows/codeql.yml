@@ -1,0 +1,76 @@
+name: CodeQL Security Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run CodeQL analysis weekly (Mondays at 06:00 UTC)
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  analyze:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript' ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: +security-extended,security-and-quality
+          # Custom queries for JavaScript security
+          config: |
+            name: "HBV CodeQL Config"
+            queries:
+              - uses: security-extended
+              - uses: security-and-quality
+            paths-ignore:
+              - node_modules
+              - '**/*.test.js'
+              - '**/*.spec.js'
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
+          upload: true
+          output: sarif-results
+
+      - name: Upload results as artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: codeql-results-${{ matrix.language }}
+          path: sarif-results
+          retention-days: 30
+
+      - name: Security Summary
+        if: always()
+        run: |
+          echo "## CodeQL Analysis Complete :shield:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Language**: ${{ matrix.language }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: Analysis completed" >> $GITHUB_STEP_SUMMARY
+          echo "- **Queries**: security-extended + security-and-quality" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Review findings in the Security tab of the repository." >> $GITHUB_STEP_SUMMARY
