@@ -24,12 +24,30 @@ This repository contains the official landing page for [invokehoneybadger.com](h
 ```
 invokehoneybadger.github.io/
 ├── index.html                  # Main landing page (responsive, terminal-themed)
-├── CNAME                       # Custom domain configuration (invokehoneybadger.com)
+├── styles.css                  # External stylesheet (modular, cacheable)
+├── js/                         # JavaScript modules
+│   ├── matrix.js               # Matrix rain animation
+│   ├── hexagon.js              # Hexagon overlay effects
+│   ├── terminal.js             # Terminal stream simulation
+│   ├── boot.js                 # Boot sequence with audio
+│   └── counter.js              # Visitor counter
+├── .github/
+│   ├── workflows/
+│   │   ├── deploy.yml          # GitHub Pages deployment
+│   │   ├── security-scan.yml   # Trivy, TruffleHog, HTML validation, Lighthouse
+│   │   ├── codeql.yml          # CodeQL security analysis
+│   │   └── optimize-assets.yml # Automatic CSS/JS minification
+│   └── dependabot.yml          # Automated dependency updates
+├── CNAME                       # Custom domain configuration
 ├── README.md                   # This file
 ├── LICENSE                     # MIT License
 ├── SECURITY.md                 # Security policy and vulnerability reporting
-├── .gitignore                  # Git ignore rules
+├── DEPLOYMENT.md               # Server configuration and deployment guide
+├── CONTRIBUTING.md             # Contribution guidelines
+├── _headers                    # HTTP headers config (Netlify/CDN)
 ├── robots.txt                  # SEO crawler directives
+├── sitemap.xml                 # SEO sitemap
+├── manifest.json               # PWA manifest
 ├── .well-known/
 │   └── security.txt            # RFC 9116 security contact information
 ├── invokehoneybadger_favicon.ico
@@ -115,11 +133,22 @@ The InvokeHoneyBadger ecosystem includes:
 
 ## 🛠️ Technical Stack
 
-- **HTML5** - Semantic, accessible markup
-- **CSS3** - Custom terminal-themed styling with CSS variables
-- **Vanilla JavaScript** - No framework dependencies
-- **Canvas API** - Matrix rain and hexagon animations
+- **HTML5** - Semantic, accessible markup (WCAG AA compliant)
+- **CSS3** - Modular external stylesheet with CSS variables
+- **Vanilla JavaScript** - ES6+ modular architecture, zero dependencies
+- **Canvas API** - Hardware-accelerated matrix rain and hexagon animations
 - **Web Audio API** - Terminal boot sound effects
+- **GitHub Actions** - CI/CD pipeline with automated testing and deployment
+- **CodeQL** - Advanced security analysis
+- **Lighthouse CI** - Performance and accessibility audits
+
+### Architecture
+
+**Modular Design:**
+- Separate CSS file for better caching and maintainability
+- JavaScript split into 5 focused modules for code organization
+- Resource hints (preload, preconnect, dns-prefetch) for optimal performance
+- Deferred loading for non-critical scripts
 
 ### Browser Support
 
@@ -173,9 +202,41 @@ Contributions are welcome! To contribute:
 
 ## 📌 Project Status
 
-**Status**: Active Development
+**Status**: ✅ Active Development
 **Last Updated**: December 2025
 **Maintained By**: InvokeHoneyBadger Team
+
+### Recent Improvements (Phase 2)
+
+✅ **Code Organization**
+- Extracted CSS into external `styles.css` file
+- Modularized JavaScript into 5 separate files
+- Improved maintainability and browser caching
+
+✅ **Security & Quality**
+- Added CodeQL workflow for advanced security analysis
+- Automated asset minification on deployment
+- HTML5 compliant security headers configuration
+- Comprehensive deployment documentation
+
+✅ **Performance**
+- Resource hints (DNS prefetch, preconnect, preload)
+- Deferred loading for non-critical scripts
+- Optimized script execution order
+- Automated minification workflow
+
+✅ **Accessibility (WCAG AA)**
+- Skip-to-content link for keyboard navigation
+- Enhanced ARIA labels and roles
+- Focus indicators on all interactive elements
+- Screen reader optimizations
+
+✅ **CI/CD Pipeline**
+- GitHub Actions deployment workflow
+- Security scanning (Trivy, TruffleHog)
+- HTML5 validation
+- Lighthouse performance audits
+- Automated dependency updates via Dependabot
 
 ---
 
