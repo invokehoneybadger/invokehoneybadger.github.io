@@ -105,23 +105,9 @@
 <body>
   <!-- Accessibility: Skip to main content -->
   <a href="#main-content" class="skip-to-main">Skip to main content</a>
-  <!-- Matrix canvas background -->
-  <canvas id="matrix-canvas" aria-hidden="true"></canvas>
-  <!-- Hexagon overlay (left side only) -->
-  <canvas id="hex-canvas" aria-hidden="true"></canvas>
-  <div class="vignette" aria-hidden="true"></div>
-  <div class="scanlines" aria-hidden="true"></div>
 
   <div class="wrap">
-    <div class="card" id="main-content" role="main" aria-labelledby="site-title">
-      <aside class="term" aria-label="HBV Terminal Output">
-        <div class="title">hbv@invokehoneybadger:~$ <small style="color:#9fbf9a;font-weight:600">session</small></div>
-        <!-- dynamic terminal stream -->
-        <pre id="term-stream" aria-live="polite" role="log" aria-label="Terminal activity log"></pre>
-        <div style="margin-top:auto;color:#86b386;font-size:12px;opacity:0.9" role="status" aria-live="polite">Connected • Beacon: active • ops mode: stealth</div>
-      </aside>
-
-      <div class="main">
+    <div class="container" id="main-content" role="main" aria-labelledby="site-title">
         <div class="hero">
           <div class="logo" aria-hidden="true" title="Invoke HoneyBadger — HBV">
             <div class="hb">HBV</div>
@@ -148,60 +134,12 @@
         <!-- HBV Network Links -->
         <div class="links" aria-label="HBV Network">
           <h2>HBV Network</h2>
-          <div class="links-grid">
-            <a class="link-card" href="https://api.invokehoneybadger.com" target="_blank" rel="noopener">
-              <span class="link-icon">API</span>
-              <span class="link-text">
-                <span class="link-title">API Gateway</span>
-                <span class="link-sub">api.invokehoneybadger.com</span>
-              </span>
-              <span class="ext" aria-hidden="true">↗</span>
-            </a>
-
-            <a class="link-card" href="https://portal.invokehoneybadger.com" target="_blank" rel="noopener">
-              <span class="link-icon">PRT</span>
-              <span class="link-text">
-                <span class="link-title">Portal</span>
-                <span class="link-sub">Operations dashboard</span>
-              </span>
-              <span class="ext" aria-hidden="true">↗</span>
-            </a>
-
-            <a class="link-card" href="https://shop.invokehoneybadger.com" target="_blank" rel="noopener">
-              <span class="link-icon">SHP</span>
-              <span class="link-text">
-                <span class="link-title">Shop</span>
-                <span class="link-sub">Official HBV merch</span>
-              </span>
-              <span class="ext" aria-hidden="true">↗</span>
-            </a>
-
-            <a class="link-card" href="https://invokehoneybadger.com" target="_blank" rel="noopener">
-              <span class="link-icon">WWW</span>
-              <span class="link-text">
-                <span class="link-title">Main Site</span>
-                <span class="link-sub">invokehoneybadger.com</span>
-              </span>
-              <span class="ext" aria-hidden="true">↗</span>
-            </a>
-
-            <a class="link-card" href="https://github.com/invokehoneybadger" target="_blank" rel="noopener">
-              <span class="link-icon">GH</span>
-              <span class="link-text">
-                <span class="link-title">GitHub Org</span>
-                <span class="link-sub">source & releases</span>
-              </span>
-              <span class="ext" aria-hidden="true">↗</span>
-            </a>
-
-            <a class="link-card" href="https://x.com/InvokHonyBadgr" target="_blank" rel="noopener">
-              <span class="link-icon">X</span>
-              <span class="link-text">
-                <span class="link-title">X / Updates</span>
-                <span class="link-sub">@InvokHonyBadgr</span>
-              </span>
-              <span class="ext" aria-hidden="true">↗</span>
-            </a>
+          <div class="button-grid">
+            <a class="btn btn-link" href="https://api.invokehoneybadger.com" target="_blank" rel="noopener">API Gateway</a>
+            <a class="btn btn-link" href="https://portal.invokehoneybadger.com" target="_blank" rel="noopener">Portal</a>
+            <a class="btn btn-link" href="https://shop.invokehoneybadger.com" target="_blank" rel="noopener">Shop</a>
+            <a class="btn btn-link" href="https://github.com/invokehoneybadger" target="_blank" rel="noopener">GitHub</a>
+            <a class="btn btn-link" href="https://x.com/InvokHonyBadgr" target="_blank" rel="noopener">X / Twitter</a>
           </div>
         </div>
           <!-- HBV Boot Banner -->
@@ -215,34 +153,27 @@
           </div>
      </div>
 
-        <footer>© <span id="year"></span> InvokeHoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>     
-        <!-- Signature / Tribute -->
-        <div class="signature" role="note" aria-label="Signature phrase">
-          <span class="sig-emoji" aria-hidden="true">🦾</span>
-          <span class="sig-text">Inspired by live tradecraft. Hardened by real-world ops. Built in the shadows.<span class="sig-nod">— R.M.</span></span>
-        </div>
+      <footer>© <span id="year"></span> InvokeHoneyBadger — HoneyBadger Vanguard. Built with ☕ and BRRRRT.</footer>
+      <!-- Signature / Tribute -->
+      <div class="signature" role="note" aria-label="Signature phrase">
+        <span class="sig-emoji" aria-hidden="true">🦾</span>
+        <span class="sig-text">Inspired by live tradecraft. Hardened by real-world ops. Built in the shadows.<span class="sig-nod">— R.M.</span></span>
       </div>
     </div>
   </div>
 
 <!-- External JavaScript Modules with SRI -->
-<!-- Critical animations loaded immediately -->
-<script src="/js/matrix.js"
-        integrity="sha384-uAcRenXbPZsPs3Ioi6CKML51U/EluP+fZWemvBwGyzI+EVm7uEksSqyNF+ooPuPL"
-        crossorigin="anonymous"></script>
-<script src="/js/hexagon.js"
-        integrity="sha384-obH+i5p5CM55A1wZ1FToSn2u7i+DUvAoDg7yNL1ujYvWbOibGGOIQmhk6UXbrUVq"
-        crossorigin="anonymous"></script>
 <!-- Non-critical scripts deferred for performance -->
-<script src="/js/terminal.js" defer
-        integrity="sha384-6fkjYUe2sJ83r8Pv1KHq+yMynGIG+HrHRDGWMt/zt0TVf5pE52T3UlU6eejtJDVB"
-        crossorigin="anonymous"></script>
 <script src="/js/boot.js" defer
         integrity="sha384-rYi5lw4dPuNu3vYV8MVEP1dOj6ya73oNt1yQdfQI3P8kt4KKbPgbJRf3bI6ESTgd"
         crossorigin="anonymous"></script>
 <script src="/js/counter.js" defer
         integrity="sha384-FjaJoNK+T6gKLdCZrV+qJWMXm6c9sb4cZn8exCMAP+p7YKyTEZQC4Mm6a1+sJYFt"
         crossorigin="anonymous"></script>
+<script>
+  // Set current year
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 
 </body>
 </html>
