@@ -12,31 +12,95 @@
 <title>InvokeHoneyBadger — HBV (Terminal)</title>
 
 <!-- Security Headers -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://api.countapi.xyz; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.countapi.xyz; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <!-- Note: X-Content-Type-Options, X-Frame-Options, and Permissions-Policy should be set at server level -->
 
 <!-- SEO & Social Meta Tags -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="InvokeHoneyBadger" />
-<meta property="og:title" content="InvokeHoneyBadger — HBV" />
-<meta property="og:description" content="Red-team tooling, recon frameworks, and HBV community resources." />
+<meta property="og:title" content="InvokeHoneyBadger — HoneyBadger Vanguard (HBV)" />
+<meta property="og:description" content="Origins of HoneyBadger Vanguard (HBV) — red-team tooling, recon frameworks, and HBV community resources. Built in the shadows." />
 <meta property="og:url" content="https://invokehoneybadger.com" />
-<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:image" content="https://invokehoneybadger.com/invokehoneybadger_favicon_32.png" />
+<meta property="og:image:width" content="32" />
+<meta property="og:image:height" content="32" />
+<meta property="og:image:alt" content="InvokeHoneyBadger HBV Logo" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@InvokHonyBadgr" />
 <meta name="twitter:creator" content="@InvokHonyBadgr" />
+<meta name="twitter:title" content="InvokeHoneyBadger — HBV" />
+<meta name="twitter:description" content="Red-team tooling, recon frameworks, and HBV community resources" />
+<meta name="twitter:image" content="https://invokehoneybadger.com/invokehoneybadger_favicon_32.png" />
 <link rel="canonical" href="https://invokehoneybadger.com" />
 <meta name="robots" content="index, follow" />
 
+<!-- JSON-LD Structured Data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "InvokeHoneyBadger",
+      "alternateName": "HoneyBadger Vanguard",
+      "url": "https://invokehoneybadger.com",
+      "logo": "https://invokehoneybadger.com/invokehoneybadger_favicon_32.png",
+      "description": "HoneyBadger Vanguard (HBV) - Red-team tooling, recon frameworks, and HBV community resources",
+      "sameAs": [
+        "https://github.com/invokehoneybadger",
+        "https://x.com/InvokHonyBadgr"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "hi@invokehoneybadger.com",
+        "contactType": "Customer Service"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "name": "InvokeHoneyBadger",
+      "url": "https://invokehoneybadger.com",
+      "description": "Origins of HoneyBadger Vanguard (HBV) — red-team tooling, recon frameworks, and HBV community resources",
+      "publisher": {
+        "@type": "Organization",
+        "name": "InvokeHoneyBadger"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://invokehoneybadger.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://invokehoneybadger.com/#webpage",
+      "url": "https://invokehoneybadger.com",
+      "name": "InvokeHoneyBadger — HBV (Terminal)",
+      "isPartOf": {
+        "@id": "https://invokehoneybadger.com/#website"
+      },
+      "about": {
+        "@type": "Thing",
+        "name": "Cybersecurity Tools",
+        "description": "Red-team tooling and reconnaissance frameworks"
+      },
+      "description": "InvokeHoneyBadger — HoneyBadger Vanguard (HBV). Red-team tooling, recon frameworks, and HBV community resources."
+    }
+  ]
+}
+</script>
+
 <!-- Performance & Resource Hints -->
-<link rel="dns-prefetch" href="https://api.countapi.xyz">
-<link rel="preconnect" href="https://api.countapi.xyz" crossorigin>
 <link rel="preload" href="/styles.css" as="style">
 <link rel="preload" href="/js/matrix.js" as="script">
 <link rel="preload" href="/js/hexagon.js" as="script">
 
-<!-- External Stylesheet -->
-<link rel="stylesheet" href="/styles.css">
+<!-- External Stylesheet with SRI -->
+<link rel="stylesheet" href="/styles.css"
+      integrity="sha384-moI5mRaDDQK05uLOaa8foUqaLjeE527wo1gaSkx47UXuPzonFHMbb/tJpcXjlRcJ"
+      crossorigin="anonymous">
 </head>
 <body>
   <!-- Accessibility: Skip to main content -->
@@ -140,16 +204,14 @@
             </a>
           </div>
         </div>
-          <!-- HBV Boot Banner (move inside .main, above footer) -->
-      <div style="display:flex;flex-direction:column;align-items:center;">  
-        <div id="hbvBootBar"
-               style="background-color:#0b0b0b;color:#FFF244;font-family:'Courier New', monospace;text-align:center;padding:10px;border:1px solid #FFF244;border-radius:6px;width:300px;margin:10px 0 0 auto;margin-left:auto;margin-right:auto;opacity:0;transform:translateY(-10px);transition:opacity 1.2s ease, transform 1.2s ease;box-shadow:0 0 15px #FFF244;">
+          <!-- HBV Boot Banner -->
+      <div class="boot-container">
+        <div id="hbvBootBar">
             HBV&gt; Terminal Online _
           </div>
-          <!-- HBV Terminal-Style Visitor Counter (move inside .main, below boot bar) -->
-          <div id="hbvCounter" aria-live="polite"
-               style="background-color:#030304;color:#FFF244;font-family:'Courier New', monospace;text-align:center;padding:8px 0;border:1px solid #FFF244;border-radius:6px;width:280px;margin:12px auto 20px;box-shadow:0 0 12px #FFF244;">
-            HBV&gt; Initializing visitor counter...
+          <!-- HBV Terminal-Style Status Display -->
+          <div id="hbvCounter" aria-live="polite" role="status" aria-label="System status display">
+            HBV&gt; Initializing systems...
           </div>
      </div>
 
@@ -163,14 +225,24 @@
     </div>
   </div>
 
-<!-- External JavaScript Modules -->
+<!-- External JavaScript Modules with SRI -->
 <!-- Critical animations loaded immediately -->
-<script src="/js/matrix.js"></script>
-<script src="/js/hexagon.js"></script>
+<script src="/js/matrix.js"
+        integrity="sha384-uAcRenXbPZsPs3Ioi6CKML51U/EluP+fZWemvBwGyzI+EVm7uEksSqyNF+ooPuPL"
+        crossorigin="anonymous"></script>
+<script src="/js/hexagon.js"
+        integrity="sha384-obH+i5p5CM55A1wZ1FToSn2u7i+DUvAoDg7yNL1ujYvWbOibGGOIQmhk6UXbrUVq"
+        crossorigin="anonymous"></script>
 <!-- Non-critical scripts deferred for performance -->
-<script src="/js/terminal.js" defer></script>
-<script src="/js/boot.js" defer></script>
-<script src="/js/counter.js" defer></script>
+<script src="/js/terminal.js" defer
+        integrity="sha384-6fkjYUe2sJ83r8Pv1KHq+yMynGIG+HrHRDGWMt/zt0TVf5pE52T3UlU6eejtJDVB"
+        crossorigin="anonymous"></script>
+<script src="/js/boot.js" defer
+        integrity="sha384-rYi5lw4dPuNu3vYV8MVEP1dOj6ya73oNt1yQdfQI3P8kt4KKbPgbJRf3bI6ESTgd"
+        crossorigin="anonymous"></script>
+<script src="/js/counter.js" defer
+        integrity="sha384-FjaJoNK+T6gKLdCZrV+qJWMXm6c9sb4cZn8exCMAP+p7YKyTEZQC4Mm6a1+sJYFt"
+        crossorigin="anonymous"></script>
 
 </body>
 </html>

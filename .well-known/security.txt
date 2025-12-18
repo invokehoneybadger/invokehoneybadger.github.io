@@ -15,3 +15,12 @@ Acknowledgments: https://invokehoneybadger.com/SECURITY.md
 
 # Encryption
 # PGP key available upon request at security@invokehoneybadger.com
+Encryption: https://keybase.io/invokehoneybadger
+
+# Hiring
+Hiring: https://invokehoneybadger.com
+
+# Important Notes
+# - Please report vulnerabilities responsibly
+# - We aim to respond within 48 hours
+# - Do NOT open public GitHub issues for security vulnerabilities
